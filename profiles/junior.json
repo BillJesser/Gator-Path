@@ -1,0 +1,39 @@
+{
+  "studentName": "Taylor Junior",
+  "programName": "Computer Science, B.S.",
+  "standing": "Junior",
+  "catalogYear": 2023,
+  "startingTerm": "Fall 2023",
+  "completedCourseCodes": [
+    "ENC1101",
+    "ENC1102",
+    "IDS2935",
+    "MAC2311",
+    "MAC2312",
+    "MAC2313",
+    "MAS3114",
+    "PHY2048",
+    "PHY2049",
+    "STA3032",
+    "COP3502C",
+    "COP3503C",
+    "COP3530",
+    "CDA3101"
+  ],
+  "inProgressCourseCodes": [
+    "CEN3031",
+    "CIS4301",
+    "ENC3246"
+  ],
+  "remainingRequirementCourseCodes": [
+    "COP4020",
+    "COP4533",
+    "COP4600",
+    "CNT4007",
+    "EGS4034"
+  ],
+  "notes": [
+    "Junior scenario for testing upper-division schedule generation.",
+    "Most foundational requirements are done, so recommendations should focus on advanced CS requirements and remaining graduation items."
+  ]
+}

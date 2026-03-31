@@ -1,0 +1,1831 @@
+{
+  "legend": [
+    {
+      "difficulty": "Easy",
+      "description": "Introductory content, lighter workload, mostly conceptual"
+    },
+    {
+      "difficulty": "Medium",
+      "description": "Moderate difficulty, requires solid prerequisites"
+    },
+    {
+      "difficulty": "Hard",
+      "description": "Heavy math/coding, graduate-level rigor, most demanding"
+    }
+  ],
+  "note": "Difficulty ratings are based on typical student experience at UF. Actual difficulty may vary by instructor and semester.",
+  "requiredCoreCourses": [
+    {
+      "code": "MAC2311",
+      "displayCode": "MAC 2311",
+      "name": "Analytic Geometry and Calculus 1",
+      "difficulty": "Medium",
+      "notes": "Critical Tracking",
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "MAC2312",
+      "displayCode": "MAC 2312",
+      "name": "Analytic Geometry and Calculus 2",
+      "difficulty": "Medium",
+      "notes": "Critical Tracking",
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "MAC2313",
+      "displayCode": "MAC 2313",
+      "name": "Analytic Geometry and Calculus 3",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking",
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "MAS3114",
+      "displayCode": "MAS 3114",
+      "name": "Computational Linear Algebra",
+      "difficulty": "Medium",
+      "notes": "Or MAS 4105",
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "PHY2048",
+      "displayCode": "PHY 2048",
+      "name": "Physics with Calculus 1 + Lab",
+      "difficulty": "Medium",
+      "notes": "Critical Tracking",
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "PHY2049",
+      "displayCode": "PHY 2049",
+      "name": "Physics with Calculus 2 + Lab",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking",
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "STA3032",
+      "displayCode": "STA 3032",
+      "name": "Engineering Statistics",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "FOUNDATIONAL: Math & Science"
+    },
+    {
+      "code": "ENC3246",
+      "displayCode": "ENC 3246",
+      "name": "Professional Communication for Engineers",
+      "difficulty": "Easy",
+      "notes": "Or ENC 2256",
+      "group": "FOUNDATIONAL: Communication"
+    },
+    {
+      "code": "ENC2256",
+      "displayCode": "ENC 2256",
+      "name": "Writing in the Disciplines",
+      "difficulty": "Easy",
+      "notes": "Alt. for ENC 3246",
+      "group": "FOUNDATIONAL: Communication"
+    },
+    {
+      "code": "ENC1101",
+      "displayCode": "ENC 1101",
+      "name": "Expository and Argumentative Writing",
+      "difficulty": "Easy",
+      "notes": "Gen Ed Composition",
+      "group": "FOUNDATIONAL: Communication"
+    },
+    {
+      "code": "COP3502C",
+      "displayCode": "COP 3502C",
+      "name": "Programming Fundamentals 1",
+      "difficulty": "Medium",
+      "notes": "Critical Tracking",
+      "group": "COMPUTING CORE"
+    },
+    {
+      "code": "COP3503C",
+      "displayCode": "COP 3503C",
+      "name": "Programming Fundamentals 2",
+      "difficulty": "Medium",
+      "notes": "Or COP 3504C",
+      "group": "COMPUTING CORE"
+    },
+    {
+      "code": "COP3504C",
+      "displayCode": "COP 3504C",
+      "name": "Programming Fundamentals (Accelerated)",
+      "difficulty": "Hard",
+      "notes": "Replaces 3502C+3503C",
+      "group": "COMPUTING CORE"
+    },
+    {
+      "code": "COP3530",
+      "displayCode": "COP 3530",
+      "name": "Data Structures and Algorithms",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking",
+      "group": "COMPUTING CORE"
+    },
+    {
+      "code": "COT3100",
+      "displayCode": "COT 3100",
+      "name": "Applications of Discrete Structures",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking",
+      "group": "COMPUTING CORE"
+    },
+    {
+      "code": "CDA3101",
+      "displayCode": "CDA 3101",
+      "name": "Introduction to Computer Organization",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking",
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "CEN3031",
+      "displayCode": "CEN 3031",
+      "name": "Introduction to Software Engineering",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "CIS4301",
+      "displayCode": "CIS 4301",
+      "name": "Information and Database Systems 1",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "CIS4914",
+      "displayCode": "CIS 4914",
+      "name": "Senior Project",
+      "difficulty": "Hard",
+      "notes": "Or EGN 4952",
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "CNT4007",
+      "displayCode": "CNT 4007",
+      "name": "Computer Network Fundamentals",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "COP4020",
+      "displayCode": "COP 4020",
+      "name": "Programming Language Concepts",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking Sem 8",
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "COP4533",
+      "displayCode": "COP 4533",
+      "name": "Algorithm Abstraction and Design",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "COP4600",
+      "displayCode": "COP 4600",
+      "name": "Operating Systems",
+      "difficulty": "Hard",
+      "notes": "Critical Tracking",
+      "group": "MAJOR CORE"
+    },
+    {
+      "code": "EGS4034",
+      "displayCode": "EGS 4034",
+      "name": "Engineering Ethics and Professionalism",
+      "difficulty": "Easy",
+      "notes": "Or CGS 3065 / PHI 3681",
+      "group": "MAJOR CORE"
+    }
+  ],
+  "ciseTechnicalElectives": [
+    {
+      "code": "CAI4104",
+      "displayCode": "CAI 4104",
+      "name": "Machine Learning Engineering",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CAP4621",
+      "displayCode": "CAP 4621",
+      "name": "Artificial Intelligence and Heuristics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CAP4641",
+      "displayCode": "CAP 4641",
+      "name": "Natural Language Processing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CAP4410",
+      "displayCode": "CAP 4410",
+      "name": "Computer Vision",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CAP4613",
+      "displayCode": "CAP 4613",
+      "name": "Deep Learning for Computer Graphics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CAP4770",
+      "displayCode": "CAP 4770",
+      "name": "Introduction to Data Science",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CAP4773",
+      "displayCode": "CAP 4773",
+      "name": "Projects in Data Science",
+      "difficulty": "Medium",
+      "notes": "Prereq: CAP 4770",
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CIS4930",
+      "displayCode": "CIS 4930",
+      "name": "Special Topics in CISE",
+      "difficulty": "Medium",
+      "notes": "Topic varies by semester",
+      "group": "AI / Machine Learning / Data Science"
+    },
+    {
+      "code": "CDA4102",
+      "displayCode": "CDA 4102",
+      "name": "Computer Architecture",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Systems & Architecture"
+    },
+    {
+      "code": "CDA4630",
+      "displayCode": "CDA 4630",
+      "name": "Embedded Systems",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Systems & Architecture"
+    },
+    {
+      "code": "CDA4324C",
+      "displayCode": "CDA 4324C",
+      "name": "Cyber-Physical System Security",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Systems & Architecture"
+    },
+    {
+      "code": "CEN4072",
+      "displayCode": "CEN 4072",
+      "name": "Software Testing and Verification",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Software Engineering & HCI"
+    },
+    {
+      "code": "CEN4721",
+      "displayCode": "CEN 4721",
+      "name": "Human-Computer Interaction",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Software Engineering & HCI"
+    },
+    {
+      "code": "CEN4722",
+      "displayCode": "CEN 4722",
+      "name": "User Experience Design",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Software Engineering & HCI"
+    },
+    {
+      "code": "CEN4725",
+      "displayCode": "CEN 4725",
+      "name": "Natural User Interaction",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Software Engineering & HCI"
+    },
+    {
+      "code": "CEN4730",
+      "displayCode": "CEN 4730",
+      "name": "Human-Centered Input Recognition Algorithms",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Software Engineering & HCI"
+    },
+    {
+      "code": "CAP3020",
+      "displayCode": "CAP 3020",
+      "name": "Theory and Practice of Multimedia Production",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Graphics & Multimedia"
+    },
+    {
+      "code": "CAP3027",
+      "displayCode": "CAP 3027",
+      "name": "Introduction to Computational Media",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Graphics & Multimedia"
+    },
+    {
+      "code": "CAP4053",
+      "displayCode": "CAP 4053",
+      "name": "Artificial Intelligence for Computer Games",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Graphics & Multimedia"
+    },
+    {
+      "code": "CAP4112",
+      "displayCode": "CAP 4112",
+      "name": "Generating Expressiveness in Intelligent Agents",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Graphics & Multimedia"
+    },
+    {
+      "code": "CAP4174",
+      "displayCode": "CAP 4174",
+      "name": "3D Audio for Interfaces",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Graphics & Multimedia"
+    },
+    {
+      "code": "CAP4730",
+      "displayCode": "CAP 4730",
+      "name": "Computational Structures in Computer Graphics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Graphics & Multimedia"
+    },
+    {
+      "code": "CAP4136",
+      "displayCode": "CAP 4136",
+      "name": "Malware Reverse Engineering",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Security"
+    },
+    {
+      "code": "CIS4905",
+      "displayCode": "CIS 4905",
+      "name": "Individual Study in CISE",
+      "difficulty": "Medium",
+      "notes": "Advisor approval required",
+      "group": "Research & Independent Study"
+    },
+    {
+      "code": "CIS4940",
+      "displayCode": "CIS 4940",
+      "name": "Practical Work (Internship)",
+      "difficulty": "Easy",
+      "notes": "Advisor approval required",
+      "group": "Research & Independent Study"
+    },
+    {
+      "code": "CIS4949",
+      "displayCode": "CIS 4949",
+      "name": "Co-Op Work in CISE",
+      "difficulty": "Easy",
+      "notes": "Advisor approval required",
+      "group": "Research & Independent Study"
+    },
+    {
+      "code": "EGN4912",
+      "displayCode": "EGN 4912",
+      "name": "Engineering Directed Independent Research",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Research & Independent Study"
+    },
+    {
+      "code": "EGN4951",
+      "displayCode": "EGN 4951",
+      "name": "Integrated Product and Process Design 1",
+      "difficulty": "Medium",
+      "notes": "IPPD1, prereq to IPPD2",
+      "group": "Research & Independent Study"
+    },
+    {
+      "code": "EEL3701C",
+      "displayCode": "EEL 3701C",
+      "name": "Digital Logic and Computer Systems",
+      "difficulty": "Hard",
+      "notes": "Common tech elective",
+      "group": "General Engineering Electives"
+    },
+    {
+      "code": "EEL4744C",
+      "displayCode": "EEL 4744C",
+      "name": "Microprocessor Applications",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "General Engineering Electives"
+    },
+    {
+      "code": "EIN3354",
+      "displayCode": "EIN 3354",
+      "name": "Engineering Economy",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "General Engineering Electives"
+    },
+    {
+      "code": "CGS3065",
+      "displayCode": "CGS 3065",
+      "name": "Legal and Social Issues in Computing",
+      "difficulty": "Easy",
+      "notes": "Alt for EGS 4034 ethics",
+      "group": "General Engineering Electives"
+    },
+    {
+      "code": "PHI3681",
+      "displayCode": "PHI 3681",
+      "name": "Ethics, Data, and Technology",
+      "difficulty": "Easy",
+      "notes": "Counts as ethics + 3 TE cr",
+      "group": "General Engineering Electives"
+    }
+  ],
+  "approvedTechElectives": [
+    {
+      "code": "EEL5091",
+      "displayCode": "EEL 5091",
+      "name": "Quantum Mechanics for Nanodevices",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5182",
+      "displayCode": "EEL 5182",
+      "name": "State Variable Methods in Linear Systems",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5250",
+      "displayCode": "EEL 5250",
+      "name": "Power System Analysis",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5406",
+      "displayCode": "EEL 5406",
+      "name": "Computational Photography",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5441",
+      "displayCode": "EEL 5441",
+      "name": "Fundamentals of Photonics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5525",
+      "displayCode": "EEL 5525",
+      "name": "Digital Signal Processing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5544",
+      "displayCode": "EEL 5544",
+      "name": "Noise in Linear Systems",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5632",
+      "displayCode": "EEL 5632",
+      "name": "Safety and Security of Vehicular Electronic Systems",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5666C",
+      "displayCode": "EEL 5666C",
+      "name": "Intelligent Machines Design Laboratory",
+      "difficulty": "Hard",
+      "notes": "4 credits",
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5718",
+      "displayCode": "EEL 5718",
+      "name": "Computer Communications",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5721",
+      "displayCode": "EEL 5721",
+      "name": "Reconfigurable Computing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5733",
+      "displayCode": "EEL 5733",
+      "name": "Advanced Systems Programming",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5737",
+      "displayCode": "EEL 5737",
+      "name": "Principles of Computer System Design",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5739",
+      "displayCode": "EEL 5739",
+      "name": "IoT Security and Privacy",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5749",
+      "displayCode": "EEL 5749",
+      "name": "IoT Design",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5764",
+      "displayCode": "EEL 5764",
+      "name": "Computer Architecture",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5840",
+      "displayCode": "EEL 5840",
+      "name": "Fundamentals of Machine Learning",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL5855",
+      "displayCode": "EEL 5855",
+      "name": "Cross Layered Systems Security",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6246",
+      "displayCode": "EEL 6246",
+      "name": "Power Electronics II",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6382",
+      "displayCode": "EEL 6382",
+      "name": "Semiconductor Physics Electronics I",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6507",
+      "displayCode": "EEL 6507",
+      "name": "Queuing Theory and Data Communications",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6509",
+      "displayCode": "EEL 6509",
+      "name": "Wireless Communication",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6512",
+      "displayCode": "EEL 6512",
+      "name": "Image Processing and Computer Vision",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6528",
+      "displayCode": "EEL 6528",
+      "name": "Digital Communications with Software-Defined Radios",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6532",
+      "displayCode": "EEL 6532",
+      "name": "Information Theory",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6533",
+      "displayCode": "EEL 6533",
+      "name": "Data Analytics and Decision Sciences",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6535",
+      "displayCode": "EEL 6535",
+      "name": "Digital Communications",
+      "difficulty": "Hard",
+      "notes": "Cannot be used for CORE",
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6537",
+      "displayCode": "EEL 6537",
+      "name": "Spectral Sensing and Sparse Signal Recovery",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6550",
+      "displayCode": "EEL 6550",
+      "name": "Error Correction Coding",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6555",
+      "displayCode": "EEL 6555",
+      "name": "Signal Processing for Active Sensing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6586",
+      "displayCode": "EEL 6586",
+      "name": "Automatic Speech Processing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6588",
+      "displayCode": "EEL 6588",
+      "name": "Wireless Ad Hoc Networks",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6591",
+      "displayCode": "EEL 6591",
+      "name": "Wireless Networks",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6614",
+      "displayCode": "EEL 6614",
+      "name": "Modern Control Theory",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6706",
+      "displayCode": "EEL 6706",
+      "name": "Fault-Tolerant Computer Architecture",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6761",
+      "displayCode": "EEL 6761",
+      "name": "Cloud Computer Systems and Applications",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6763",
+      "displayCode": "EEL 6763",
+      "name": "Parallel Computer Architecture",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6814",
+      "displayCode": "EEL 6814",
+      "name": "Neural Networks and Deep Learning",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6825",
+      "displayCode": "EEL 6825",
+      "name": "Pattern Recognition and Intelligent Systems",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6841",
+      "displayCode": "EEL 6841",
+      "name": "Machine Intelligence and Synthesis",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6855",
+      "displayCode": "EEL 6855",
+      "name": "Database Engineering",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6871",
+      "displayCode": "EEL 6871",
+      "name": "Cloud Computing Systems Management",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6892",
+      "displayCode": "EEL 6892",
+      "name": "Virtual Computers",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEL6935",
+      "displayCode": "EEL 6935",
+      "name": "Special Topics in Electrical Engineering",
+      "difficulty": "Medium",
+      "notes": "Topic varies (Big Data, Cloud, etc.)",
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5216",
+      "displayCode": "EEE 5216",
+      "name": "Introduction to Biophotonics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5283",
+      "displayCode": "EEE 5283",
+      "name": "Neural Signals, Systems and Technology",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5317C",
+      "displayCode": "EEE 5317C",
+      "name": "Introduction to Power Electronics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5320",
+      "displayCode": "EEE 5320",
+      "name": "Analog IC Design I",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5322",
+      "displayCode": "EEE 5322",
+      "name": "VLSI Circuits and Technology 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5354L",
+      "displayCode": "EEE 5354L",
+      "name": "Semiconductor Device Fabrication Laboratory",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5364",
+      "displayCode": "EEE 5364",
+      "name": "Fundamentals of Data Converters",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5374",
+      "displayCode": "EEE 5374",
+      "name": "Radio Frequency Integrated Circuits 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5400",
+      "displayCode": "EEE 5400",
+      "name": "Future of Microelectronics Technology",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5405",
+      "displayCode": "EEE 5405",
+      "name": "Microelectronic Fabrication Technologies",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5408",
+      "displayCode": "EEE 5408",
+      "name": "Mixed Signal IC Testing I",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5426",
+      "displayCode": "EEE 5426",
+      "name": "Introduction to Nanodevices",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5480",
+      "displayCode": "EEE 5480",
+      "name": "Physical Attacks and Inspection of Electronics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5502",
+      "displayCode": "EEE 5502",
+      "name": "Foundations of Digital Signal Processing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5544",
+      "displayCode": "EEE 5544",
+      "name": "Stochastic Methods for Engineering 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5590",
+      "displayCode": "EEE 5590",
+      "name": "Introduction to Quantum Computing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5702",
+      "displayCode": "EEE 5702",
+      "name": "Automated Hardware/Software Verification",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5716",
+      "displayCode": "EEE 5716",
+      "name": "Introduction to Hardware Security and Trust",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE5776",
+      "displayCode": "EEE 5776",
+      "name": "Applied Machine Learning",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6321",
+      "displayCode": "EEE 6321",
+      "name": "Analog IC Design II",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6323",
+      "displayCode": "EEE 6323",
+      "name": "VLSI Circuits and Technology 2",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6382",
+      "displayCode": "EEE 6382",
+      "name": "Semiconductor Physical Electronics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6390",
+      "displayCode": "EEE 6390",
+      "name": "VLSI Device Design",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6428",
+      "displayCode": "EEE 6428",
+      "name": "Nanoscale Devices for VLSI Technology",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6504",
+      "displayCode": "EEE 6504",
+      "name": "Machine Learning for Time Series",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6512",
+      "displayCode": "EEE 6512",
+      "name": "Image Processing and Computer Vision",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6545",
+      "displayCode": "EEE 6545",
+      "name": "Stochastic Methods for Engineering 2",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6561",
+      "displayCode": "EEE 6561",
+      "name": "Fundamentals of Biometric Identification",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6742",
+      "displayCode": "EEE 6742",
+      "name": "Advanced Hardware Security and Trust",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6744",
+      "displayCode": "EEE 6744",
+      "name": "Hands-On Hardware Security",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EEE6778",
+      "displayCode": "EEE 6778",
+      "name": "Applied Machine Learning II",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "CNT6805",
+      "displayCode": "CNT 6805",
+      "name": "Network Science and Applications",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Electrical & Computer Engineering (ECE)"
+    },
+    {
+      "code": "EGN5215",
+      "displayCode": "EGN 5215",
+      "name": "Machine Learning Applications in Civil Engineering",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "EGN5216",
+      "displayCode": "EGN 5216",
+      "name": "Machine Learning for Artificial Intelligence Systems",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "EGN5442",
+      "displayCode": "EGN 5442",
+      "name": "Programming for Applied Data Science",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "EGN6216",
+      "displayCode": "EGN 6216",
+      "name": "Artificial Intelligence Systems",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "EGN6217",
+      "displayCode": "EGN 6217",
+      "name": "Applied Deep Learning",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "EGN6446",
+      "displayCode": "EGN 6446",
+      "name": "Mathematical Foundations for Applied Data Science",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "BSC6895",
+      "displayCode": "BSC 6895",
+      "name": "AI in Biology",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Machine Learning / AI / Data Science"
+    },
+    {
+      "code": "MAA5104",
+      "displayCode": "MAA 5104",
+      "name": "Advanced Calculus 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAA5105",
+      "displayCode": "MAA 5105",
+      "name": "Advanced Calculus 2",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAA5404",
+      "displayCode": "MAA 5404",
+      "name": "Introduction to Complex Variables",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAD6206",
+      "displayCode": "MAD 6206",
+      "name": "Combinatorial Theory",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAD6207",
+      "displayCode": "MAD 6207",
+      "name": "Combinatorics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAD6406",
+      "displayCode": "MAD 6406",
+      "name": "Numerical Linear Algorithms",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAP5304",
+      "displayCode": "MAP 5304",
+      "name": "Differential Equations for Engineers",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAP5345",
+      "displayCode": "MAP 5345",
+      "name": "Introduction to Partial Differential Equations",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAP5489",
+      "displayCode": "MAP 5489",
+      "name": "Modeling in Mathematical Biology",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAP6208",
+      "displayCode": "MAP 6208",
+      "name": "Numerical Optimization",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAS5311",
+      "displayCode": "MAS 5311",
+      "name": "Introduction to Algebra 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAS5312",
+      "displayCode": "MAS 5312",
+      "name": "Introduction to Algebra 2",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAS6331",
+      "displayCode": "MAS 6331",
+      "name": "Algebra 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "MAS7215",
+      "displayCode": "MAS 7215",
+      "name": "Theory of Numbers 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "EGM6341",
+      "displayCode": "EGM 6341",
+      "name": "Numerical Methods of Engineering Analysis",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Mathematics"
+    },
+    {
+      "code": "STA5325",
+      "displayCode": "STA 5325",
+      "name": "Mathematical Methods in Statistics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA5328",
+      "displayCode": "STA 5328",
+      "name": "Mathematical Methods in Statistics II",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA5503",
+      "displayCode": "STA 5503",
+      "name": "Categorical Data Methods",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA6166",
+      "displayCode": "STA 6166",
+      "name": "Statistical Methods in Research I",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA6326",
+      "displayCode": "STA 6326",
+      "name": "Introduction to Theoretical Statistics I",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA6327",
+      "displayCode": "STA 6327",
+      "name": "Introduction to Theoretical Statistics II",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA6466",
+      "displayCode": "STA 6466",
+      "name": "Probability Theory 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA6468",
+      "displayCode": "STA 6468",
+      "name": "Probability Theory 2",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA6505",
+      "displayCode": "STA 6505",
+      "name": "Categorical Data Analysis",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA7346",
+      "displayCode": "STA 7346",
+      "name": "Statistical Inference",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "STA7934",
+      "displayCode": "STA 7934",
+      "name": "Markov Chain Monte Carlo Methods",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Statistics"
+    },
+    {
+      "code": "ESI6314",
+      "displayCode": "ESI 6314",
+      "name": "Deterministic Methods in Operations Research",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6321",
+      "displayCode": "ESI 6321",
+      "name": "Applied Probability Methods",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6323",
+      "displayCode": "ESI 6323",
+      "name": "Models for Supply Chain Management",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6355",
+      "displayCode": "ESI 6355",
+      "name": "Decision Support Systems",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6417",
+      "displayCode": "ESI 6417",
+      "name": "Linear Programming and Network Optimization",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6448",
+      "displayCode": "ESI 6448",
+      "name": "Discrete Optimization Theory",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6552",
+      "displayCode": "ESI 6552",
+      "name": "Systems Architecture",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6553",
+      "displayCode": "ESI 6553",
+      "name": "Systems Design",
+      "difficulty": "Medium",
+      "notes": "Cannot take EGN 6640 concurrently",
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ESI6912",
+      "displayCode": "ESI 6912",
+      "name": "Topics in Data Mining / Network Optimization",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Industrial & Systems Engineering"
+    },
+    {
+      "code": "ISM6128",
+      "displayCode": "ISM 6128",
+      "name": "Systems Analysis and Design 1",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "ISM6129",
+      "displayCode": "ISM 6129",
+      "name": "Systems Analysis and Design 2",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "ISM6215",
+      "displayCode": "ISM 6215",
+      "name": "Business Database Systems 1",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "ISM6216",
+      "displayCode": "ISM 6216",
+      "name": "Business Database Systems 2",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "ISM6405",
+      "displayCode": "ISM 6405",
+      "name": "Introduction to Business Intelligence",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "ISM6423",
+      "displayCode": "ISM 6423",
+      "name": "Data Analysis and Decision Support",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "MAN5246",
+      "displayCode": "MAN 5246",
+      "name": "Organizational Behavior",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "MAN6581",
+      "displayCode": "MAN 6581",
+      "name": "Project Management",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "EIN6357",
+      "displayCode": "EIN 6357",
+      "name": "Advanced Engineering Economy",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "EIN6905",
+      "displayCode": "EIN 6905",
+      "name": "Web-Enabled Decision Support / Data Mining",
+      "difficulty": "Medium",
+      "notes": "Multiple special topics",
+      "group": "Business & Management"
+    },
+    {
+      "code": "FIN6930",
+      "displayCode": "FIN 6930",
+      "name": "Entrepreneurship for Engineers",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Business & Management"
+    },
+    {
+      "code": "EML5311",
+      "displayCode": "EML 5311",
+      "name": "Control System Theory",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Control & Mechanical Engineering"
+    },
+    {
+      "code": "EML5318",
+      "displayCode": "EML 5318",
+      "name": "Computer Control of Machines and Processes",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Control & Mechanical Engineering"
+    },
+    {
+      "code": "EML6934",
+      "displayCode": "EML 6934",
+      "name": "Verification, Validation, Uncertainty Reduction",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Control & Mechanical Engineering"
+    },
+    {
+      "code": "EME5207",
+      "displayCode": "EME 5207",
+      "name": "Designing Technology-Rich Curricula",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME5404",
+      "displayCode": "EME 5404",
+      "name": "Instructional Computing: Media Ecologies",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME5405",
+      "displayCode": "EME 5405",
+      "name": "Internet in K-12 Instruction",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6059",
+      "displayCode": "EME 6059",
+      "name": "Blended Learning Environments",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6208",
+      "displayCode": "EME 6208",
+      "name": "Designing Integrated Media Environments",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6235",
+      "displayCode": "EME 6235",
+      "name": "Managing Educational Projects",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6458",
+      "displayCode": "EME 6458",
+      "name": "Distance Teaching and Learning",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6606",
+      "displayCode": "EME 6606",
+      "name": "Advanced Instructional Design",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6609",
+      "displayCode": "EME 6609",
+      "name": "Instructional Design",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "EME6065",
+      "displayCode": "EME 6065",
+      "name": "Human-Computer Interaction and the Learner",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Educational Technology"
+    },
+    {
+      "code": "LIN6773",
+      "displayCode": "LIN 6773",
+      "name": "Topics in Computational Linguistics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Linguistics & NLP"
+    },
+    {
+      "code": "LIN6932",
+      "displayCode": "LIN 6932",
+      "name": "Computational Linguistics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Linguistics & NLP"
+    },
+    {
+      "code": "BME5500",
+      "displayCode": "BME 5500",
+      "name": "Biomedical Instrumentation",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Biomedical & Biology"
+    },
+    {
+      "code": "BME5522",
+      "displayCode": "BME 5522",
+      "name": "Multivariate Signal Processing",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Biomedical & Biology"
+    },
+    {
+      "code": "BME6938",
+      "displayCode": "BME 6938",
+      "name": "Special Topics: Biomedical Data Science",
+      "difficulty": "Hard",
+      "notes": "Special topics number",
+      "group": "Biomedical & Biology"
+    },
+    {
+      "code": "BCH5045",
+      "displayCode": "BCH 5045",
+      "name": "Graduate Survey of Biochemistry",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Biomedical & Biology"
+    },
+    {
+      "code": "PSB6087",
+      "displayCode": "PSB 6087",
+      "name": "Behavioral and Cognitive Neuroscience",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Biomedical & Biology"
+    },
+    {
+      "code": "CHM6158",
+      "displayCode": "CHM 6158",
+      "name": "Electronics and Instrumentation",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Chemistry"
+    },
+    {
+      "code": "CHM6470",
+      "displayCode": "CHM 6470",
+      "name": "Chemical Bonding and Spectra 1",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Chemistry"
+    },
+    {
+      "code": "CHM6580",
+      "displayCode": "CHM 6580",
+      "name": "Special Topics: Molecular Dynamics",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Chemistry"
+    },
+    {
+      "code": "CHM6586",
+      "displayCode": "CHM 6586",
+      "name": "Computational Chemistry",
+      "difficulty": "Hard",
+      "notes": null,
+      "group": "Chemistry"
+    },
+    {
+      "code": "EGN6039",
+      "displayCode": "EGN 6039",
+      "name": "Engineering Leadership",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGN6640",
+      "displayCode": "EGN 6640",
+      "name": "Entrepreneurship for Engineers",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGN6642",
+      "displayCode": "EGN 6642",
+      "name": "Engineering Innovation",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGS6039",
+      "displayCode": "EGS 6039",
+      "name": "Engineering Leadership",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGS6216",
+      "displayCode": "EGS 6216",
+      "name": "AI Ethics for Technology Leaders",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGS6626",
+      "displayCode": "EGS 6626",
+      "name": "Fundamentals of Engineering Project Management",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGS6628",
+      "displayCode": "EGS 6628",
+      "name": "Advanced Practices in Engineering Project Management",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "EGS6629",
+      "displayCode": "EGS 6629",
+      "name": "Agile Project Management for Engineers",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Engineering Leadership & Innovation"
+    },
+    {
+      "code": "MMC6135",
+      "displayCode": "MMC 6135",
+      "name": "Data Visualization",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Data Visualization & GIS"
+    },
+    {
+      "code": "PHC6791",
+      "displayCode": "PHC 6791",
+      "name": "Data Visualization in Health Science",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Data Visualization & GIS"
+    },
+    {
+      "code": "EES6028",
+      "displayCode": "EES 6028",
+      "name": "Spatial Modeling & GIS",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Data Visualization & GIS"
+    },
+    {
+      "code": "URP6270",
+      "displayCode": "URP 6270",
+      "name": "Survey Planning Information Systems",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Data Visualization & GIS"
+    },
+    {
+      "code": "LAW6930",
+      "displayCode": "LAW 6930",
+      "name": "Electronic Discovery, Data Analysis & Review",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Law & Policy"
+    },
+    {
+      "code": "PUP6009",
+      "displayCode": "PUP 6009",
+      "name": "Public Policy Analysis",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Law & Policy"
+    },
+    {
+      "code": "GMS6806",
+      "displayCode": "GMS 6806",
+      "name": "Security & Privacy in Clinical Research",
+      "difficulty": "Medium",
+      "notes": null,
+      "group": "Law & Policy"
+    },
+    {
+      "code": "WST6004",
+      "displayCode": "WST 6004",
+      "name": "Feminist Methods in Research and Scholarship",
+      "difficulty": "Easy",
+      "notes": null,
+      "group": "Law & Policy"
+    }
+  ]
+}

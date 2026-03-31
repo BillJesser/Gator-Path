@@ -1,0 +1,39 @@
+{
+  "studentName": "Jordan Sophomore",
+  "programName": "Computer Science, B.S.",
+  "standing": "Sophomore",
+  "catalogYear": 2024,
+  "startingTerm": "Fall 2024",
+  "completedCourseCodes": [
+    "ENC1101",
+    "ENC1102",
+    "IDS2935",
+    "MAC2311",
+    "MAC2312",
+    "PHY2048",
+    "COP3502C",
+    "COP3503C"
+  ],
+  "inProgressCourseCodes": [
+    "MAC2313",
+    "COP3530",
+    "CDA3101",
+    "PHY2049"
+  ],
+  "remainingRequirementCourseCodes": [
+    "MAS3114",
+    "STA3032",
+    "ENC3246",
+    "COP4020",
+    "CEN3031",
+    "CIS4301",
+    "COP4533",
+    "COP4600",
+    "CNT4007",
+    "EGS4034"
+  ],
+  "notes": [
+    "Sophomore scenario for testing mid-pipeline prerequisite chains.",
+    "Core programming prerequisites are nearly complete, but upper-division classes should still be filtered carefully."
+  ]
+}

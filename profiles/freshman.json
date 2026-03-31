@@ -1,0 +1,41 @@
+{
+  "studentName": "Avery Freshman",
+  "programName": "Computer Science, B.S.",
+  "standing": "Freshman",
+  "catalogYear": 2025,
+  "startingTerm": "Fall 2025",
+  "completedCourseCodes": [
+    "ENC1101",
+    "IDS2935",
+    "MAC2311",
+    "COP3502C"
+  ],
+  "inProgressCourseCodes": [
+    "MAC2312",
+    "COP3503C",
+    "COT3100",
+    "PHY2048",
+    "ENC1102"
+  ],
+  "remainingRequirementCourseCodes": [
+    "MAC2313",
+    "MAS3114",
+    "PHY2049",
+    "STA3032",
+    "ENC3246",
+    "COP3530",
+    "CDA3101",
+    "QUE2000",
+    "COP4020",
+    "CEN3031",
+    "CIS4301",
+    "COP4533",
+    "COP4600",
+    "CNT4007",
+    "EGS4034"
+  ],
+  "notes": [
+    "Freshman scenario for testing early-program recommendations.",
+    "Limited completed coursework should bias the planner toward foundational and critical-tracking classes."
+  ]
+}
