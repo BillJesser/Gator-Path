@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { BookOpen, CalendarDays, Loader2, Sparkles } from "lucide-react"
+import { BookOpen, CalendarDays, Loader2, RefreshCw, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -27,6 +27,7 @@ import {
   getRecommendedCandidates,
   getTermLabel,
   parseMaxCredits,
+  type AuditRemainingCourseInput,
   type FormatPreference,
   type GeneratedScheduleOption,
   type TimePreference,
@@ -106,8 +107,17 @@ export function PlannerContent() {
   )
 
   const candidatePool = useMemo(
-    () => getRecommendedCandidates(completedCodes, inProgressCodes, remainingCodesFromAudit).slice(0, 8),
-    [completedCodes, inProgressCodes, remainingCodesFromAudit]
+    () =>
+      getRecommendedCandidates({
+        completedCodes,
+        inProgressCodes,
+        remainingCodesFromAudit,
+        remainingCoursesFromAudit:
+          (uploadedAudit?.remainingRequirementCourses as AuditRemainingCourseInput[] | undefined) ||
+          [],
+        limit: 14,
+      }),
+    [completedCodes, inProgressCodes, remainingCodesFromAudit, uploadedAudit]
   )
 
   const activeSemester = semesters.find((semester) => semester.id === activeSemesterId) || null
@@ -116,6 +126,16 @@ export function PlannerContent() {
   const loadRecommendations = async (semesterId: string) => {
     const semester = semesters.find((entry) => entry.id === semesterId)
     if (!semester) {
+      return
+    }
+
+    if (candidatePool.length === 0) {
+      setActiveSemesterId(semesterId)
+      setOptions([])
+      setWarnings([])
+      setError(
+        "No remaining courses could be derived from the uploaded degree audit for this semester."
+      )
       return
     }
 
@@ -136,6 +156,7 @@ export function PlannerContent() {
         timePreference,
         formatPreference,
         satisfiedCourseCodes,
+        limit: 6,
       })
 
       setOptions(generated)
@@ -313,13 +334,28 @@ export function PlannerContent() {
       <Dialog open={Boolean(activeSemesterId)} onOpenChange={(open) => !open && setActiveSemesterId(null)}>
         <DialogContent className="w-full sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-xl">
-              Live Semester Recommendations{activeSemester ? ` - ${activeSemester.label}` : ""}
-            </DialogTitle>
-            <DialogDescription>
-              These options come from the UF public course endpoint plus the uploaded degree-audit
-              JSON.
-            </DialogDescription>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-1">
+                <DialogTitle className="text-xl">
+                  Live Semester Recommendations{activeSemester ? ` - ${activeSemester.label}` : ""}
+                </DialogTitle>
+                <DialogDescription>
+                  These options come from the UF public course endpoint plus the uploaded degree-audit
+                  JSON.
+                </DialogDescription>
+              </div>
+              {activeSemester && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => loadRecommendations(activeSemester.id)}
+                  disabled={isLoading}
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Refresh
+                </Button>
+              )}
+            </div>
           </DialogHeader>
 
           <Card className="border-dashed">
@@ -403,7 +439,7 @@ export function PlannerContent() {
           {activeSemester?.termCode === TERM_OPTIONS[2].code && (
             <p className="text-xs text-muted-foreground">
               Spring 2027 is still selectable, but the public UF endpoint currently returns no rows
-              for term code 2271 in this repo’s queries.
+              for term code 2271 in this repo's queries.
             </p>
           )}
         </DialogContent>

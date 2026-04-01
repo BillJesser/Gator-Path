@@ -74,6 +74,11 @@ export type CourseCandidate = {
   sourceLabel: string
 }
 
+export type AuditRemainingCourseInput = {
+  code: string
+  title?: string
+}
+
 export type ScheduledSectionChoice = {
   course: CourseCandidate
   section: UfSection
@@ -130,6 +135,10 @@ const sectionColors = [
   "bg-chart-4",
   "bg-chart-5",
 ]
+
+const catalogCourseLookup = new Map(
+  [...requiredCoreCourses, ...electiveCourses].map((course) => [course.code, course])
+)
 
 type RawUfResponse = Array<{
   COURSES?: unknown[]
@@ -264,6 +273,16 @@ function normalizeMeeting(raw: unknown): UfMeeting | null {
 
 export function normalizeCourseCode(value: string) {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, "")
+}
+
+export function formatCourseDisplayCode(value: string) {
+  const normalized = normalizeCourseCode(value)
+  const match = normalized.match(/^([A-Z]{3})(\d{4}[A-Z]?)$/)
+  if (!match) {
+    return normalized
+  }
+
+  return `${match[1]} ${match[2]}`
 }
 
 export function extractCourseCodes(text: string) {
@@ -542,37 +561,120 @@ export function parseMaxCredits(value: string) {
 }
 
 export function getRecommendedCandidates(
-  completedCodes: Set<string>,
-  inProgressCodes: Set<string>,
-  remainingCodesFromAudit: Set<string>
+  args: {
+    completedCodes: Set<string>
+    inProgressCodes: Set<string>
+    remainingCodesFromAudit: Set<string>
+    remainingCoursesFromAudit?: AuditRemainingCourseInput[]
+    limit?: number
+  }
 ): CourseCandidate[] {
+  const {
+    completedCodes,
+    inProgressCodes,
+    remainingCodesFromAudit,
+    remainingCoursesFromAudit = [],
+    limit = 14,
+  } = args
   const completedOrActive = new Set([...completedCodes, ...inProgressCodes])
+  const seenCodes = new Set<string>()
 
-  const requiredCandidates: CourseCandidate[] = requiredCoreCourses
-    .filter((course) => !completedOrActive.has(course.code))
-    .map((course): CourseCandidate => ({
-      ...course,
-      source: remainingCodesFromAudit.has(course.code)
-        ? ("remaining-from-audit" satisfies CoursePriority)
-        : ("required" satisfies CoursePriority),
-      sourceLabel: remainingCodesFromAudit.has(course.code)
-        ? "Remaining requirement from audit"
-        : "Required core course",
-    }))
+  function findCatalogCourse(code: string) {
+    const normalized = normalizeCourseCode(code)
+    return (
+      catalogCourseLookup.get(normalized) ||
+      (normalized.endsWith("C") ? catalogCourseLookup.get(normalized.slice(0, -1)) : null) ||
+      catalogCourseLookup.get(`${normalized}C`) ||
+      null
+    )
+  }
 
-  const electiveFallback: CourseCandidate[] = electiveCourses
-    .filter((course) => !completedOrActive.has(course.code))
-    .slice(0, 8)
-    .map((course): CourseCandidate => ({
-      code: course.code,
-      displayCode: course.displayCode,
-      name: course.name,
-      difficulty: course.difficulty,
-      notes: course.notes,
-      group: course.group,
-      source: "elective-fallback" satisfies CoursePriority,
-      sourceLabel: "Elective fallback",
-    }))
+  function createAuditCandidate(code: string, title?: string): CourseCandidate | null {
+    const normalized = normalizeCourseCode(code)
+    if (!normalized || completedOrActive.has(normalized) || seenCodes.has(normalized)) {
+      return null
+    }
+
+    const catalogMatch = findCatalogCourse(normalized)
+    seenCodes.add(normalized)
+
+    if (catalogMatch) {
+      return {
+        ...catalogMatch,
+        source: "remaining-from-audit",
+        sourceLabel: "Remaining requirement from uploaded degree audit",
+      }
+    }
+
+    const cleanedTitle = title
+      ?.replace(new RegExp(`^${formatCourseDisplayCode(normalized)}\\s*-\\s*`, "i"), "")
+      .trim()
+
+    return {
+      code: normalized,
+      displayCode: formatCourseDisplayCode(normalized),
+      name: cleanedTitle || "Remaining degree requirement",
+      difficulty: "Medium",
+      notes: "This requirement comes directly from the uploaded degree audit.",
+      group: "Uploaded Degree Audit",
+      source: "remaining-from-audit",
+      sourceLabel: "Remaining requirement from uploaded degree audit",
+    }
+  }
+
+  const auditCandidates = remainingCoursesFromAudit
+    .map((course) => createAuditCandidate(course.code, course.title))
+    .filter((course): course is CourseCandidate => course !== null)
+
+  for (const code of remainingCodesFromAudit) {
+    const candidate = createAuditCandidate(code)
+    if (candidate) {
+      auditCandidates.push(candidate)
+    }
+  }
+
+  const requiredCandidates: CourseCandidate[] = requiredCoreCourses.reduce<CourseCandidate[]>(
+    (candidates, course) => {
+      if (completedOrActive.has(course.code) || seenCodes.has(course.code)) {
+        return candidates
+      }
+
+      seenCodes.add(course.code)
+      candidates.push({
+        ...course,
+        source: remainingCodesFromAudit.has(course.code)
+          ? ("remaining-from-audit" satisfies CoursePriority)
+          : ("required" satisfies CoursePriority),
+        sourceLabel: remainingCodesFromAudit.has(course.code)
+          ? "Remaining requirement from audit"
+          : "Required core course",
+      })
+      return candidates
+    },
+    []
+  )
+
+  const electiveFallback: CourseCandidate[] = electiveCourses.reduce<CourseCandidate[]>(
+    (candidates, course) => {
+      if (completedOrActive.has(course.code) || seenCodes.has(course.code)) {
+        return candidates
+      }
+
+      seenCodes.add(course.code)
+      candidates.push({
+        code: course.code,
+        displayCode: course.displayCode,
+        name: course.name,
+        difficulty: course.difficulty,
+        notes: course.notes,
+        group: course.group,
+        source: "elective-fallback" satisfies CoursePriority,
+        sourceLabel: "Elective fallback",
+      })
+      return candidates
+    },
+    []
+  )
 
   const prioritizedRequired = requiredCandidates.sort((left, right) => {
     const leftPriority = left.source === "remaining-from-audit" ? 0 : 1
@@ -580,7 +682,7 @@ export function getRecommendedCandidates(
     return leftPriority - rightPriority || left.displayCode.localeCompare(right.displayCode)
   })
 
-  return [...prioritizedRequired, ...electiveFallback]
+  return [...auditCandidates, ...prioritizedRequired, ...electiveFallback].slice(0, limit)
 }
 
 function toMinutes(time: string | null) {

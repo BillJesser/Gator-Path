@@ -33,6 +33,7 @@ import {
   getRecommendedCandidates,
   getTermLabel,
   parseMaxCredits,
+  type AuditRemainingCourseInput,
   type FormatPreference,
   type GeneratedScheduleOption,
   type TimePreference,
@@ -108,14 +109,32 @@ export function ScheduleContent() {
 
   const recommendedCandidates = useMemo(
     () =>
-      getRecommendedCandidates(completedCodes, inProgressCodes, remainingCodesFromAudit).slice(0, 8),
-    [completedCodes, inProgressCodes, remainingCodesFromAudit]
+      getRecommendedCandidates({
+        completedCodes,
+        inProgressCodes,
+        remainingCodesFromAudit,
+        remainingCoursesFromAudit:
+          (uploadedAudit?.remainingRequirementCourses as AuditRemainingCourseInput[] | undefined) ||
+          [],
+        limit: 14,
+      }),
+    [completedCodes, inProgressCodes, remainingCodesFromAudit, uploadedAudit]
   )
 
   const selectedOption =
     options.find((option) => option.id === selectedOptionId) || options[0] || null
 
   const generateSchedules = async () => {
+    if (recommendedCandidates.length === 0) {
+      setError(
+        "No remaining courses could be derived from the uploaded degree audit for schedule generation."
+      )
+      setOptions([])
+      setSelectedOptionId(null)
+      setWarnings([])
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
@@ -133,6 +152,7 @@ export function ScheduleContent() {
         timePreference,
         formatPreference,
         satisfiedCourseCodes,
+        limit: 6,
       })
 
       setApiSectionCount(
@@ -270,19 +290,30 @@ export function ScheduleContent() {
               </Select>
             </div>
             <div className="sm:col-span-2">
-              <Button onClick={generateSchedules} disabled={isLoading} className="w-full sm:w-auto">
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Querying ONE.UF
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Generate Schedules
-                  </>
-                )}
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={generateSchedules} disabled={isLoading} className="w-full sm:w-auto">
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Querying ONE.UF
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="mr-2 h-4 w-4" />
+                      Generate Schedules
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={generateSchedules}
+                  disabled={isLoading || recommendedCandidates.length === 0}
+                  className="w-full sm:w-auto"
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Refresh Results
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -319,7 +350,7 @@ export function ScheduleContent() {
             </div>
             <p className="text-xs text-muted-foreground">
               Selected term: {getTermLabel(selectedTerm)}. As of March 31, 2026, the public UF API
-              returns no rows for term code 2271 in this app’s queries.
+              returns no rows for term code 2271 in this app's queries.
             </p>
           </CardContent>
         </Card>
