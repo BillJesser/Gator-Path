@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { usePlanningData } from "@/components/planning-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -26,32 +26,11 @@ import {
   Save,
   CheckCircle2,
   Circle,
-  Info,
 } from "lucide-react"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-
-const majors = [
-  "Computer Science",
-  "Computer Engineering",
-  "Digital Arts & Sciences",
-  "Information Systems",
-  "Electrical Engineering",
-]
-
-const minors = [
-  "Mathematics",
-  "Business Administration",
-  "Digital Arts & Sciences",
-  "Statistics",
-  "Physics",
-]
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 export function ProfileContent() {
+  const { uploadedAudit, uploadedAuditFileName } = usePlanningData()
   const [timePreference, setTimePreference] = useState<string[]>(["morning", "afternoon"])
   const [formatPreference, setFormatPreference] = useState("hybrid")
 
@@ -59,6 +38,10 @@ export function ProfileContent() {
     setTimePreference((prev) =>
       prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
     )
+  }
+
+  if (!uploadedAudit) {
+    return null
   }
 
   return (
@@ -92,56 +75,27 @@ export function ProfileContent() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="major">Primary Major</Label>
-                    <Select defaultValue="Computer Science">
-                      <SelectTrigger id="major">
-                        <SelectValue placeholder="Select major" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {majors.map((major) => (
-                          <SelectItem key={major} value={major}>
-                            {major}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Label>Student Name</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.studentName || "Unknown student"}
+                    </p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="minor">Minor (Optional)</Label>
-                    <Select defaultValue="Mathematics">
-                      <SelectTrigger id="minor">
-                        <SelectValue placeholder="Select minor" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">None</SelectItem>
-                        {minors.map((minor) => (
-                          <SelectItem key={minor} value={minor}>
-                            {minor}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Label>Program</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.programName || "Unknown program"}
+                    </p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="graduation">Target Graduation</Label>
-                    <Select defaultValue="Spring 2027">
-                      <SelectTrigger id="graduation">
-                        <SelectValue placeholder="Select term" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Summer 2026">Summer 2026</SelectItem>
-                        <SelectItem value="Fall 2026">Fall 2026</SelectItem>
-                        <SelectItem value="Spring 2027">Spring 2027</SelectItem>
-                        <SelectItem value="Summer 2027">Summer 2027</SelectItem>
-                        <SelectItem value="Fall 2027">Fall 2027</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Source File</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAuditFileName || "Uploaded degree audit"}
+                    </p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="ufid">UF ID</Label>
-                    <Input id="ufid" defaultValue="1234-5678" disabled className="bg-muted" />
-                    <p className="text-xs text-muted-foreground">
-                      Contact registrar to update
+                    <Label>Source Format</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.sourceFormat}
                     </p>
                   </div>
                 </CardContent>
@@ -158,59 +112,28 @@ export function ProfileContent() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label>Fall/Spring Credits</Label>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info className="w-4 h-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Full-time status requires 12+ credits</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                    <Select defaultValue="15">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select credits" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="12">12 credits (minimum full-time)</SelectItem>
-                        <SelectItem value="13">13 credits</SelectItem>
-                        <SelectItem value="14">14 credits</SelectItem>
-                        <SelectItem value="15">15 credits (recommended)</SelectItem>
-                        <SelectItem value="16">16 credits</SelectItem>
-                        <SelectItem value="17">17 credits</SelectItem>
-                        <SelectItem value="18">18 credits (heavy load)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-3">
-                    <Label>Summer Attendance</Label>
-                    <div className="flex items-start gap-3">
-                      <Checkbox id="summer" defaultChecked />
-                      <div className="space-y-1">
-                        <label htmlFor="summer" className="text-sm font-medium cursor-pointer">
-                          Include summer semesters in my plan
-                        </label>
-                        <p className="text-xs text-muted-foreground">
-                          Taking summer classes can help you graduate earlier
-                        </p>
-                      </div>
-                    </div>
+                    <Label>Completed Courses</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.completedCourseCodes.length}
+                    </p>
                   </div>
                   <div className="space-y-2">
-                    <Label>Summer Credits</Label>
-                    <Select defaultValue="6">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select credits" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="3">3 credits (1 course)</SelectItem>
-                        <SelectItem value="6">6 credits (2 courses)</SelectItem>
-                        <SelectItem value="9">9 credits (3 courses)</SelectItem>
-                        <SelectItem value="12">12 credits (full-time)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>In-Progress Courses</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.inProgressCourseCodes.length}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Remaining Requirements</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.remainingRequirementCourseCodes.length}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Requirement Sections</Label>
+                    <p className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm">
+                      {uploadedAudit.sections.length}
+                    </p>
                   </div>
                 </CardContent>
               </Card>

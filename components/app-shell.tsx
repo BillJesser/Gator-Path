@@ -4,20 +4,20 @@ import React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { DegreeAuditUpload } from "@/components/degree-audit-upload"
+import { usePlanningData } from "@/components/planning-provider"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
   GraduationCap,
   CalendarDays,
-  Clock,
   BookOpen,
   ClipboardList,
   Menu,
   X,
   User,
-  LogOut,
-  Settings,
+  RotateCcw,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,13 +31,30 @@ const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Degree Audit", href: "/degree-audit", icon: ClipboardList },
   { name: "Semester Planner", href: "/planner", icon: CalendarDays },
-  { name: "Schedule View", href: "/schedule", icon: Clock },
   { name: "Coursework", href: "/coursework", icon: BookOpen },
 ]
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const { uploadedAudit, clearUploadedAudit } = usePlanningData()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  if (!uploadedAudit) {
+    return (
+      <div className="min-h-screen bg-background">
+        <main className="flex min-h-screen items-center justify-center px-4 py-16">
+          <DegreeAuditUpload variant="entry" />
+        </main>
+      </div>
+    )
+  }
+
+  const startOver = () => {
+    clearUploadedAudit()
+    setSidebarOpen(false)
+    router.push("/")
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -120,15 +137,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Profile Setup
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sign out
+                <DropdownMenuItem onClick={startOver}>
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Upload New Degree Audit
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

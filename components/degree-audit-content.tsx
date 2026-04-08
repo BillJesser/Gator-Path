@@ -1,7 +1,6 @@
 "use client"
 
 import { BookOpen, CheckCircle2, Circle, Clock3, FileJson, GraduationCap } from "lucide-react"
-import { DegreeAuditUpload } from "@/components/degree-audit-upload"
 import { usePlanningData } from "@/components/planning-provider"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
@@ -203,9 +202,13 @@ function RequirementNodeCard({
 export function DegreeAuditContent() {
   const { uploadedAudit, uploadedAuditFileName } = usePlanningData()
 
-  const completedCount = uploadedAudit?.completedCourseCodes.length || 0
-  const inProgressCount = uploadedAudit?.inProgressCourseCodes.length || 0
-  const remainingCount = uploadedAudit?.remainingRequirementCourseCodes.length || 0
+  if (!uploadedAudit) {
+    return null
+  }
+
+  const completedCount = uploadedAudit.completedCourseCodes.length || 0
+  const inProgressCount = uploadedAudit.inProgressCourseCodes.length || 0
+  const remainingCount = uploadedAudit.remainingRequirementCourseCodes.length || 0
   const totalTrackedRequirements = completedCount + inProgressCount + remainingCount
   const satisfiedRequirements = completedCount + inProgressCount
   const overallProgress =
@@ -214,11 +217,11 @@ export function DegreeAuditContent() {
       : Math.round((satisfiedRequirements / totalTrackedRequirements) * 100)
 
   const sourceLabel =
-    uploadedAudit?.sourceFormat === "one-uf"
+    uploadedAudit.sourceFormat === "one-uf"
       ? "ONE.UF degree audit"
-      : uploadedAudit?.sourceFormat === "simple"
+      : uploadedAudit.sourceFormat === "simple"
         ? "Simplified test profile"
-        : uploadedAudit?.sourceFormat === "generic"
+        : uploadedAudit.sourceFormat === "generic"
           ? "Generic JSON parse"
           : "No audit uploaded"
 
@@ -227,12 +230,9 @@ export function DegreeAuditContent() {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold text-foreground">Degree Audit</h1>
         <p className="text-muted-foreground">
-          Upload a degree-audit JSON file and review the requirement sections directly from that
-          audit instead of the local catalog fallback.
+          Review the parsed requirement sections from the uploaded degree audit.
         </p>
       </div>
-
-      <DegreeAuditUpload />
 
       <Card>
         <CardContent className="pt-6">
@@ -244,10 +244,10 @@ export function DegreeAuditContent() {
               </div>
               <div>
                 <p className="text-2xl font-semibold text-foreground">
-                  {uploadedAudit?.studentName || "Upload a degree audit JSON"}
+                  {uploadedAudit.studentName || "Uploaded student"}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {uploadedAudit?.programName || "Computer Science planning view"} · {sourceLabel}
+                  {uploadedAudit.programName || "Computer Science planning view"} · {sourceLabel}
                 </p>
               </div>
               {uploadedAuditFileName && (
@@ -292,52 +292,41 @@ export function DegreeAuditContent() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">Sections</p>
-            <p className="text-3xl font-bold text-primary">{uploadedAudit?.sections?.length || 0}</p>
+            <p className="text-3xl font-bold text-primary">{uploadedAudit.sections.length || 0}</p>
           </CardContent>
         </Card>
       </div>
 
-      {uploadedAudit && (
-        <Card className="border-dashed">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <FileJson className="h-4 w-4 text-primary" />
-              Parsed Degree Audit Summary
-            </CardTitle>
-            <CardDescription>
-              Schedule generation uses the completed, in-progress, and remaining requirements parsed
-              from this audit.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <p className="text-sm text-muted-foreground">Completed course codes</p>
-              <p className="text-2xl font-semibold">{uploadedAudit.completedCourseCodes.length}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">In-progress course codes</p>
-              <p className="text-2xl font-semibold">{uploadedAudit.inProgressCourseCodes.length}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Remaining requirement codes</p>
-              <p className="text-2xl font-semibold">
-                {uploadedAudit.remainingRequirementCourseCodes.length}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card className="border-dashed">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <FileJson className="h-4 w-4 text-primary" />
+            Parsed Degree Audit Summary
+          </CardTitle>
+          <CardDescription>
+            Planning uses the completed, in-progress, and remaining requirements parsed from this
+            audit.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <p className="text-sm text-muted-foreground">Completed course codes</p>
+            <p className="text-2xl font-semibold">{uploadedAudit.completedCourseCodes.length}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">In-progress course codes</p>
+            <p className="text-2xl font-semibold">{uploadedAudit.inProgressCourseCodes.length}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">Remaining requirement codes</p>
+            <p className="text-2xl font-semibold">
+              {uploadedAudit.remainingRequirementCourseCodes.length}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-      {!uploadedAudit && (
-        <Card className="border-dashed">
-          <CardContent className="pt-6 text-sm text-muted-foreground">
-            Upload a ONE.UF degree-audit export such as `billy.json` to render requirement sections
-            and remaining courses directly from the audit.
-          </CardContent>
-        </Card>
-      )}
-
-      {uploadedAudit && (uploadedAudit.sections?.length || 0) > 0 && (
+      {(uploadedAudit.sections?.length || 0) > 0 && (
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-primary" />
@@ -402,7 +391,7 @@ export function DegreeAuditContent() {
         </div>
       )}
 
-      {uploadedAudit && (uploadedAudit.sections?.length || 0) === 0 && (
+      {(uploadedAudit.sections?.length || 0) === 0 && (
         <Card className="border-dashed">
           <CardContent className="pt-6 text-sm text-muted-foreground">
             This JSON did not include ONE.UF-style requirement sections. The parser still extracted

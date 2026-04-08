@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { BookOpen, CalendarDays, Loader2, RefreshCw, Sparkles } from "lucide-react"
+import { usePlanningData } from "@/components/planning-provider"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,7 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { usePlanningData } from "@/components/planning-provider"
 import {
   Select,
   SelectContent,
@@ -21,9 +21,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { fetchUfScheduleBatch } from "@/lib/fetch-uf-schedule"
+import { type PlannedSemester } from "@/lib/planner"
 import {
   TERM_OPTIONS,
   buildScheduleOptions,
+  formatCourseDisplayCode,
   getRecommendedCandidates,
   getTermLabel,
   parseMaxCredits,
@@ -33,53 +35,8 @@ import {
   type TimePreference,
 } from "@/lib/uf-schedule"
 
-type PlannerCourse = {
-  code: string
-  name: string
-}
-
-type PlannerSemester = {
-  id: string
-  label: string
-  termCode: string
-  courses: PlannerCourse[]
-}
-
-const initialSemesters: PlannerSemester[] = [
-  {
-    id: "summer-2026",
-    label: "Summer 2026",
-    termCode: "2265",
-    courses: [
-      { code: "COP4600", name: "Operating Systems" },
-      { code: "CEN3031", name: "Introduction to Software Engineering" },
-      { code: "MAS3114", name: "Computational Linear Algebra" },
-    ],
-  },
-  {
-    id: "fall-2026",
-    label: "Fall 2026",
-    termCode: "2268",
-    courses: [
-      { code: "COP4533", name: "Algorithm Abstraction and Design" },
-      { code: "CIS4301", name: "Information and Database Systems" },
-      { code: "STA3032", name: "Engineering Statistics" },
-    ],
-  },
-  {
-    id: "spring-2027",
-    label: "Spring 2027",
-    termCode: "2271",
-    courses: [
-      { code: "CNT4007", name: "Computer Network Fundamentals" },
-      { code: "EGS4034", name: "Engineering Ethics and Professionalism" },
-    ],
-  },
-]
-
 export function PlannerContent() {
-  const { uploadedAudit } = usePlanningData()
-  const [semesters, setSemesters] = useState(initialSemesters)
+  const { uploadedAudit, plannerSemesters, setPlannerSemesters } = usePlanningData()
   const [activeSemesterId, setActiveSemesterId] = useState<string | null>(null)
   const [timePreference, setTimePreference] = useState<TimePreference>("any")
   const [formatPreference, setFormatPreference] = useState<FormatPreference>("any")
@@ -120,11 +77,15 @@ export function PlannerContent() {
     [completedCodes, inProgressCodes, remainingCodesFromAudit, uploadedAudit]
   )
 
-  const activeSemester = semesters.find((semester) => semester.id === activeSemesterId) || null
-  const totalPlannedCourses = semesters.reduce((sum, semester) => sum + semester.courses.length, 0)
+  const activeSemester =
+    plannerSemesters.find((semester) => semester.id === activeSemesterId) || null
+  const totalPlannedCourses = plannerSemesters.reduce(
+    (sum, semester) => sum + semester.courses.length,
+    0
+  )
 
   const loadRecommendations = async (semesterId: string) => {
-    const semester = semesters.find((entry) => entry.id === semesterId)
+    const semester = plannerSemesters.find((entry) => entry.id === semesterId)
     if (!semester) {
       return
     }
@@ -156,7 +117,7 @@ export function PlannerContent() {
         timePreference,
         formatPreference,
         satisfiedCourseCodes,
-        limit: 6,
+        limit: 3,
       })
 
       setOptions(generated)
@@ -182,14 +143,21 @@ export function PlannerContent() {
       return
     }
 
-    setSemesters((current) =>
+    setPlannerSemesters((current: PlannedSemester[]) =>
       current.map((semester) =>
         semester.id === activeSemesterId
           ? {
               ...semester,
               courses: option.courses.map((course) => ({
                 code: course.course.code,
+                displayCode: course.course.displayCode || formatCourseDisplayCode(course.course.code),
                 name: course.course.name,
+                sectionNumber: course.section.number,
+                credits: course.section.credits,
+                color: course.color,
+                meetings: course.section.meetings,
+                sectionDisplay: course.section.display,
+                note: course.section.note || null,
               })),
             }
           : semester
@@ -199,6 +167,10 @@ export function PlannerContent() {
     setOptions([])
     setWarnings([])
     setError(null)
+  }
+
+  if (!uploadedAudit) {
+    return null
   }
 
   return (
@@ -212,12 +184,12 @@ export function PlannerContent() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground">Planned semesters</p>
-              <p className="text-3xl font-bold text-primary">{semesters.length}</p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="text-sm text-muted-foreground">Planned semesters</p>
+                <p className="text-3xl font-bold text-primary">{plannerSemesters.length}</p>
+              </CardContent>
+            </Card>
           <Card>
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground">Courses in plan</p>
@@ -228,7 +200,7 @@ export function PlannerContent() {
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground">Audit state</p>
               <p className="text-3xl font-bold text-primary">
-                {uploadedAudit ? "Loaded" : "Mock"}
+                Loaded
               </p>
             </CardContent>
           </Card>
@@ -294,7 +266,7 @@ export function PlannerContent() {
         </Card>
 
         <div className="space-y-4">
-          {semesters.map((semester) => (
+          {plannerSemesters.map((semester) => (
             <Card key={semester.id}>
               <CardHeader>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -311,20 +283,26 @@ export function PlannerContent() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {semester.courses.map((course) => (
-                  <div
-                    key={`${semester.id}-${course.code}`}
-                    className="flex items-center gap-3 rounded-lg border border-border p-3"
-                  >
-                    <div className="rounded-lg bg-primary/10 p-2">
-                      <BookOpen className="h-4 w-4 text-primary" />
+                {semester.courses.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No courses planned yet for this semester.
+                  </p>
+                ) : (
+                  semester.courses.map((course) => (
+                    <div
+                      key={`${semester.id}-${course.code}`}
+                      className="flex items-center gap-3 rounded-lg border border-border p-3"
+                    >
+                      <div className="rounded-lg bg-primary/10 p-2">
+                        <BookOpen className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-primary">{course.displayCode || course.code}</p>
+                        <p className="text-sm text-muted-foreground truncate">{course.name}</p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-primary">{course.code}</p>
-                      <p className="text-sm text-muted-foreground truncate">{course.name}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </CardContent>
             </Card>
           ))}
@@ -409,7 +387,6 @@ export function PlannerContent() {
                     >
                       <div className="flex items-center justify-between gap-2">
                         <p className="text-sm font-semibold text-primary">{course.course.displayCode}</p>
-                        <Badge variant="outline">Sec {course.section.number}</Badge>
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">{course.course.name}</p>
                       <p className="mt-2 text-xs text-muted-foreground">

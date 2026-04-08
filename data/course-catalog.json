@@ -29,7 +29,8 @@
       "name": "Analytic Geometry and Calculus 2",
       "difficulty": "Medium",
       "notes": "Critical Tracking",
-      "group": "FOUNDATIONAL: Math & Science"
+      "group": "FOUNDATIONAL: Math & Science",
+      "prerequisiteGroups": [["MAC2311"]]
     },
     {
       "code": "MAC2313",
@@ -37,7 +38,8 @@
       "name": "Analytic Geometry and Calculus 3",
       "difficulty": "Hard",
       "notes": "Critical Tracking",
-      "group": "FOUNDATIONAL: Math & Science"
+      "group": "FOUNDATIONAL: Math & Science",
+      "prerequisiteGroups": [["MAC2312"]]
     },
     {
       "code": "MAS3114",
@@ -45,7 +47,8 @@
       "name": "Computational Linear Algebra",
       "difficulty": "Medium",
       "notes": "Or MAS 4105",
-      "group": "FOUNDATIONAL: Math & Science"
+      "group": "FOUNDATIONAL: Math & Science",
+      "prerequisiteGroups": [["MAC2312"]]
     },
     {
       "code": "PHY2048",
@@ -61,7 +64,8 @@
       "name": "Physics with Calculus 2 + Lab",
       "difficulty": "Hard",
       "notes": "Critical Tracking",
-      "group": "FOUNDATIONAL: Math & Science"
+      "group": "FOUNDATIONAL: Math & Science",
+      "prerequisiteGroups": [["PHY2048"]]
     },
     {
       "code": "STA3032",
@@ -109,7 +113,8 @@
       "name": "Programming Fundamentals 2",
       "difficulty": "Medium",
       "notes": "Or COP 3504C",
-      "group": "COMPUTING CORE"
+      "group": "COMPUTING CORE",
+      "prerequisiteGroups": [["COP3502C", "COP3504C"]]
     },
     {
       "code": "COP3504C",
@@ -125,7 +130,8 @@
       "name": "Data Structures and Algorithms",
       "difficulty": "Hard",
       "notes": "Critical Tracking",
-      "group": "COMPUTING CORE"
+      "group": "COMPUTING CORE",
+      "prerequisiteGroups": [["COP3503C", "COP3504C"]]
     },
     {
       "code": "COT3100",
@@ -141,7 +147,8 @@
       "name": "Introduction to Computer Organization",
       "difficulty": "Hard",
       "notes": "Critical Tracking",
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3503C", "COP3504C"]]
     },
     {
       "code": "CEN3031",
@@ -149,7 +156,8 @@
       "name": "Introduction to Software Engineering",
       "difficulty": "Medium",
       "notes": null,
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3530"]]
     },
     {
       "code": "CIS4301",
@@ -157,7 +165,8 @@
       "name": "Information and Database Systems 1",
       "difficulty": "Medium",
       "notes": null,
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3530"]]
     },
     {
       "code": "CIS4914",
@@ -173,7 +182,8 @@
       "name": "Computer Network Fundamentals",
       "difficulty": "Medium",
       "notes": null,
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3530"], ["CDA3101"]]
     },
     {
       "code": "COP4020",
@@ -181,7 +191,8 @@
       "name": "Programming Language Concepts",
       "difficulty": "Hard",
       "notes": "Critical Tracking Sem 8",
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3530"]]
     },
     {
       "code": "COP4533",
@@ -189,7 +200,8 @@
       "name": "Algorithm Abstraction and Design",
       "difficulty": "Hard",
       "notes": null,
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3530"], ["COT3100"]]
     },
     {
       "code": "COP4600",
@@ -197,7 +209,8 @@
       "name": "Operating Systems",
       "difficulty": "Hard",
       "notes": "Critical Tracking",
-      "group": "MAJOR CORE"
+      "group": "MAJOR CORE",
+      "prerequisiteGroups": [["COP3530"], ["CDA3101"]]
     },
     {
       "code": "EGS4034",

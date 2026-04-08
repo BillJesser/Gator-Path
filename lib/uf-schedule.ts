@@ -87,6 +87,7 @@ export type ScheduledSectionChoice = {
 
 export type GeneratedScheduleOption = {
   id: string
+  tier: "light" | "regular" | "heavy"
   name: string
   totalCredits: number
   conflictCount: number
@@ -830,6 +831,155 @@ function scoreOption(
   return sectionScore + totalCredits - tbaCount * 3 - gapPenalty
 }
 
+function getCatalogRequirementGroups(courseCode: string): RequirementGroups {
+  const catalogCourse =
+    catalogCourseLookup.get(courseCode) ||
+    (courseCode.endsWith("C") ? catalogCourseLookup.get(courseCode.slice(0, -1)) : null) ||
+    catalogCourseLookup.get(`${courseCode}C`) ||
+    null
+
+  return {
+    prerequisiteGroups: catalogCourse?.prerequisiteGroups || [],
+    corequisiteGroups: [],
+  }
+}
+
+function getMergedRequirementGroups(course: UfCourseRecord): RequirementGroups {
+  const catalogGroups = getCatalogRequirementGroups(course.code)
+
+  return {
+    prerequisiteGroups:
+      course.prerequisiteGroups.length > 0
+        ? course.prerequisiteGroups
+        : catalogGroups.prerequisiteGroups,
+    corequisiteGroups:
+      course.corequisiteGroups.length > 0 ? course.corequisiteGroups : catalogGroups.corequisiteGroups,
+  }
+}
+
+function getDifficultyWeight(difficulty: string) {
+  if (difficulty === "Easy") {
+    return 1
+  }
+  if (difficulty === "Hard") {
+    return 3
+  }
+  return 2
+}
+
+function getLightTargetCredits(maxCredits: number) {
+  if (maxCredits < 12) {
+    return maxCredits
+  }
+
+  return Math.min(maxCredits, Math.max(12, Math.floor(maxCredits * 0.8)))
+}
+
+function getRegularTargetCredits(maxCredits: number, lightTargetCredits: number) {
+  if (maxCredits <= lightTargetCredits) {
+    return maxCredits
+  }
+
+  const baseline = maxCredits < 12 ? maxCredits : Math.max(12, Math.floor(maxCredits * 0.9))
+  return Math.min(maxCredits, Math.max(lightTargetCredits, baseline))
+}
+
+function rankOptionForTier(
+  option: Omit<GeneratedScheduleOption, "tier" | "name">,
+  tier: GeneratedScheduleOption["tier"],
+  targetCredits: number
+) {
+  const difficultyWeights = option.courses.map((course) => getDifficultyWeight(course.course.difficulty))
+  const totalDifficulty = difficultyWeights.reduce((sum, value) => sum + value, 0)
+  const averageDifficulty =
+    difficultyWeights.length > 0 ? totalDifficulty / difficultyWeights.length : 0
+  const easyCount = difficultyWeights.filter((value) => value === 1).length
+  const hardCount = difficultyWeights.filter((value) => value === 3).length
+  const creditGap = Math.abs(option.totalCredits - targetCredits)
+  const qualityBonus = option.score * 0.1
+
+  if (tier === "light") {
+    return (
+      creditGap * 8 +
+      Math.max(0, option.totalCredits - targetCredits) * 4 +
+      totalDifficulty * 3 +
+      hardCount * 6 +
+      option.gaps * 2 +
+      option.tbaCount * 2 -
+      qualityBonus
+    )
+  }
+
+  if (tier === "regular") {
+    return (
+      creditGap * 8 +
+      Math.abs(averageDifficulty - 2) * 6 +
+      option.gaps * 2 +
+      option.tbaCount * 2 -
+      qualityBonus
+    )
+  }
+
+  return (
+    creditGap * 8 +
+    Math.max(0, targetCredits - option.totalCredits) * 5 +
+    easyCount * 2 +
+    option.gaps * 2 +
+    option.tbaCount * 2 -
+    qualityBonus
+  )
+}
+
+function chooseTieredOptions(
+  collected: Array<Omit<GeneratedScheduleOption, "tier" | "name">>,
+  maxCredits: number,
+  limit: number
+) {
+  const lightTargetCredits = getLightTargetCredits(maxCredits)
+  const regularTargetCredits = getRegularTargetCredits(maxCredits, lightTargetCredits)
+  const tierDefinitions: Array<{
+    tier: GeneratedScheduleOption["tier"]
+    name: GeneratedScheduleOption["name"]
+    targetCredits: number
+  }> = [
+    { tier: "light", name: "Light Option", targetCredits: lightTargetCredits },
+    { tier: "regular", name: "Regular Option", targetCredits: regularTargetCredits },
+    { tier: "heavy", name: "Heavy Option", targetCredits: maxCredits },
+  ]
+
+  const selectedIds = new Set<string>()
+  const selected: GeneratedScheduleOption[] = []
+
+  for (const definition of tierDefinitions.slice(0, limit)) {
+    const ranked = [...collected]
+      .filter((option) => !selectedIds.has(option.id))
+      .sort((left, right) => {
+        const leftRank = rankOptionForTier(left, definition.tier, definition.targetCredits)
+        const rightRank = rankOptionForTier(right, definition.tier, definition.targetCredits)
+        return (
+          leftRank - rightRank ||
+          Math.abs(left.totalCredits - definition.targetCredits) -
+            Math.abs(right.totalCredits - definition.targetCredits) ||
+          right.score - left.score
+        )
+      })
+
+    const chosen = ranked[0]
+    if (!chosen) {
+      continue
+    }
+
+    selectedIds.add(chosen.id)
+    selected.push({
+      ...chosen,
+      tier: definition.tier,
+      name: definition.name,
+    })
+  }
+
+  return selected
+}
+
 export function buildScheduleOptions(args: {
   courses: UfCourseRecord[]
   candidates: CourseCandidate[]
@@ -858,10 +1008,13 @@ export function buildScheduleOptions(args: {
       }
 
       if (satisfiedCourseCodes.size === 0) {
-        return true
+        return getMergedRequirementGroups(liveCourse).prerequisiteGroups.length === 0
       }
 
-      return satisfiesRequirementGroups(liveCourse.prerequisiteGroups, satisfiedCourseCodes)
+      return satisfiesRequirementGroups(
+        getMergedRequirementGroups(liveCourse).prerequisiteGroups,
+        satisfiedCourseCodes
+      )
     })
     .slice(0, 8)
 
@@ -900,6 +1053,7 @@ export function buildScheduleOptions(args: {
 
       collected.push({
         id: signature || `option-${collected.length + 1}`,
+        tier: "regular",
         name: `Option ${String.fromCharCode(65 + collected.length)}`,
         totalCredits,
         conflictCount: 0,
@@ -942,7 +1096,5 @@ export function buildScheduleOptions(args: {
 
   visit(0, [])
 
-  return collected
-    .sort((left, right) => right.totalCredits - left.totalCredits || right.score - left.score)
-    .slice(0, limit)
+  return chooseTieredOptions(collected, maxCredits, limit)
 }

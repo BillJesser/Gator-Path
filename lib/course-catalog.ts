@@ -10,6 +10,7 @@ type RawCatalogCourse = {
   difficulty: CourseDifficulty
   notes: string | null
   group: string | null
+  prerequisiteGroups?: string[][]
 }
 
 export type CatalogCourse = RawCatalogCourse & {
