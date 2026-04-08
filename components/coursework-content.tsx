@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { usePlanningData } from "@/components/planning-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -40,12 +41,42 @@ function getDifficultyColor(difficulty: CourseDifficulty) {
 }
 
 export function CourseworkContent() {
+  const { uploadedAudit } = usePlanningData()
   const [requiredSearch, setRequiredSearch] = useState("")
   const [selectedRequiredGroup, setSelectedRequiredGroup] = useState("All")
   const [electiveSearch, setElectiveSearch] = useState("")
   const [selectedElectiveSource, setSelectedElectiveSource] =
     useState<(typeof electiveSources)[number]>("All")
   const [selectedElectiveGroup, setSelectedElectiveGroup] = useState("All")
+  const completedCodes = useMemo(
+    () => new Set(uploadedAudit?.completedCourseCodes || []),
+    [uploadedAudit]
+  )
+  const inProgressCodes = useMemo(
+    () => new Set(uploadedAudit?.inProgressCourseCodes || []),
+    [uploadedAudit]
+  )
+  const remainingCodes = useMemo(
+    () => new Set(uploadedAudit?.remainingRequirementCourseCodes || []),
+    [uploadedAudit]
+  )
+
+  const getAuditStatus = (code: string) => {
+    if (completedCodes.has(code)) {
+      return { label: "Completed", className: "bg-green-100 text-green-700" }
+    }
+    if (inProgressCodes.has(code)) {
+      return { label: "In Progress", className: "bg-primary/10 text-primary" }
+    }
+    if (remainingCodes.has(code)) {
+      return { label: "Remaining", className: "bg-muted text-muted-foreground" }
+    }
+    return null
+  }
+
+  if (!uploadedAudit) {
+    return null
+  }
 
   const filteredRequired = requiredCoreCourses.filter((course) => {
     const matchesGroup =
@@ -93,7 +124,7 @@ export function CourseworkContent() {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold text-foreground">Coursework</h1>
         <p className="text-muted-foreground">
-          Browse the local course catalog loaded from repo JSON instead of a database.
+          Review the local course catalog with statuses derived from the uploaded degree audit.
         </p>
       </div>
 
@@ -168,6 +199,11 @@ export function CourseworkContent() {
                         <Badge variant="secondary" className="text-xs">
                           {course.group}
                         </Badge>
+                        {getAuditStatus(course.code) && (
+                          <Badge className={cn("text-xs", getAuditStatus(course.code)?.className)}>
+                            {getAuditStatus(course.code)?.label}
+                          </Badge>
+                        )}
                         <Badge
                           variant="secondary"
                           className={cn("text-xs", getDifficultyColor(course.difficulty))}
@@ -255,6 +291,11 @@ export function CourseworkContent() {
                       <Badge variant="secondary" className="text-xs">
                         {course.group}
                       </Badge>
+                      {getAuditStatus(course.code) && (
+                        <Badge className={cn("text-xs", getAuditStatus(course.code)?.className)}>
+                          {getAuditStatus(course.code)?.label}
+                        </Badge>
+                      )}
                       <Badge
                         variant="secondary"
                         className={cn("text-xs", getDifficultyColor(course.difficulty))}

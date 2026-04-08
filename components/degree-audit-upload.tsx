@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { usePlanningData } from "@/components/planning-provider"
 
-export function DegreeAuditUpload() {
+export function DegreeAuditUpload({
+  variant = "default",
+}: {
+  variant?: "default" | "entry"
+}) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [error, setError] = useState<string | null>(null)
   const {
@@ -42,6 +46,42 @@ export function DegreeAuditUpload() {
     }
   }
 
+  if (variant === "entry") {
+    return (
+      <div className="w-full max-w-xl">
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".json,application/json"
+          className="hidden"
+          onChange={onFileChange}
+        />
+
+        <div className="rounded-3xl border border-border bg-card/80 p-8 text-center shadow-sm">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+            <FileJson className="h-7 w-7 text-primary" />
+          </div>
+          <h1 className="text-4xl font-semibold tracking-tight text-foreground">Gator Path</h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Upload your degree audit JSON to enter the app.
+          </p>
+          <div className="mt-8">
+            <Button size="lg" className="min-w-56" onClick={openPicker}>
+              <Upload className="mr-2 h-4 w-4" />
+              Upload Degree Audit
+            </Button>
+          </div>
+          {error && (
+            <div className="mt-6 flex items-start gap-2 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-left text-sm text-destructive">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Card className="border-dashed">
       <CardHeader className="pb-3">
@@ -51,7 +91,7 @@ export function DegreeAuditUpload() {
         </CardTitle>
         <CardDescription>
           Upload a student degree-audit JSON file. The parsed result is reused across the
-          degree-audit, planner, and schedule pages.
+          dashboard, degree-audit, planner, coursework, and profile pages.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
