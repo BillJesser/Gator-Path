@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { BookOpen, CalendarDays, Loader2, RefreshCw, Sparkles } from "lucide-react"
+import { BookOpen, CalendarDays, Download, Loader2, RefreshCw, Sparkles, Trash2 } from "lucide-react"
 import { usePlanningData } from "@/components/planning-provider"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -21,15 +21,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { fetchUfScheduleBatch } from "@/lib/fetch-uf-schedule"
-import { type PlannedSemester } from "@/lib/planner"
+import { type PlannedSemester, type PlannedSemesterCourse } from "@/lib/planner"
 import {
-  TERM_OPTIONS,
   buildScheduleOptions,
   formatCourseDisplayCode,
   getRecommendedCandidates,
   getTermLabel,
   parseMaxCredits,
   type AuditRemainingCourseInput,
+  type CourseCandidate,
   type FormatPreference,
   type GeneratedScheduleOption,
   type TimePreference,
@@ -45,6 +45,7 @@ export function PlannerContent() {
   const [error, setError] = useState<string | null>(null)
   const [warnings, setWarnings] = useState<string[]>([])
   const [options, setOptions] = useState<GeneratedScheduleOption[]>([])
+  const [activeCandidatePool, setActiveCandidatePool] = useState<CourseCandidate[]>([])
 
   const completedCodes = useMemo(
     () => new Set(uploadedAudit?.completedCourseCodes || []),
@@ -76,6 +77,10 @@ export function PlannerContent() {
       }),
     [completedCodes, inProgressCodes, remainingCodesFromAudit, uploadedAudit]
   )
+  const candidateLookup = useMemo(
+    () => new Map(candidatePool.map((course) => [course.code, course])),
+    [candidatePool]
+  )
 
   const activeSemester =
     plannerSemesters.find((semester) => semester.id === activeSemesterId) || null
@@ -84,14 +89,41 @@ export function PlannerContent() {
     0
   )
 
+  const getSemesterCandidatePool = (semester: PlannedSemester) => {
+    if (semester.courses.length === 0) {
+      return candidatePool
+    }
+
+    return Array.from(new Set(semester.courses.map((course) => course.code))).map((code) => {
+      const fromAuditCandidates = candidateLookup.get(code)
+      if (fromAuditCandidates) {
+        return fromAuditCandidates
+      }
+
+      const sourceCourse = semester.courses.find((course) => course.code === code)
+      return {
+        code,
+        displayCode: sourceCourse?.displayCode || formatCourseDisplayCode(code),
+        name: sourceCourse?.name || code,
+        difficulty: "Unknown",
+        notes: sourceCourse?.note || null,
+        group: "Added to plan",
+        source: "remaining-from-audit" as const,
+        sourceLabel: "Added to semester plan",
+      }
+    })
+  }
+
   const loadRecommendations = async (semesterId: string) => {
     const semester = plannerSemesters.find((entry) => entry.id === semesterId)
     if (!semester) {
       return
     }
+    const semesterCandidatePool = getSemesterCandidatePool(semester)
 
-    if (candidatePool.length === 0) {
+    if (semesterCandidatePool.length === 0) {
       setActiveSemesterId(semesterId)
+      setActiveCandidatePool([])
       setOptions([])
       setWarnings([])
       setError(
@@ -101,18 +133,19 @@ export function PlannerContent() {
     }
 
     setActiveSemesterId(semesterId)
+    setActiveCandidatePool(semesterCandidatePool)
     setIsLoading(true)
     setError(null)
 
     try {
       const response = await fetchUfScheduleBatch(
         semester.termCode,
-        candidatePool.map((course) => course.code)
+        semesterCandidatePool.map((course) => course.code)
       )
       setWarnings(response.warnings)
       const generated = buildScheduleOptions({
         courses: response.courses,
-        candidates: candidatePool,
+        candidates: semesterCandidatePool,
         maxCredits: parseMaxCredits(maxCredits),
         timePreference,
         formatPreference,
@@ -164,9 +197,163 @@ export function PlannerContent() {
       )
     )
     setActiveSemesterId(null)
+    setActiveCandidatePool([])
     setOptions([])
     setWarnings([])
     setError(null)
+  }
+
+  const removeCourseFromSemester = (semesterId: string, courseCode: string) => {
+    setPlannerSemesters((current: PlannedSemester[]) =>
+      current.map((semester) =>
+        semester.id === semesterId
+          ? {
+              ...semester,
+              courses: semester.courses.filter((course) => course.code !== courseCode),
+            }
+          : semester
+      )
+    )
+  }
+
+  const escapePdfText = (value: string) =>
+    value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)")
+
+  const wrapPdfLine = (value: string, maxChars = 92) => {
+    if (value.length <= maxChars) {
+      return [value]
+    }
+
+    const words = value.split(" ")
+    const lines: string[] = []
+    let current = ""
+
+    for (const word of words) {
+      const next = current.length === 0 ? word : `${current} ${word}`
+      if (next.length <= maxChars) {
+        current = next
+        continue
+      }
+      if (current) {
+        lines.push(current)
+      }
+      current = word
+    }
+
+    if (current) {
+      lines.push(current)
+    }
+
+    return lines
+  }
+
+  const buildPdfBlob = (pages: string[][]) => {
+    const encoder = new TextEncoder()
+    const objects: string[] = []
+    const pageReferences: string[] = []
+
+    objects[1] = "<< /Type /Catalog /Pages 2 0 R >>"
+
+    const pageStartObject = 3
+    pages.forEach((pageLines, index) => {
+      const pageObjectNumber = pageStartObject + index * 2
+      const contentObjectNumber = pageObjectNumber + 1
+      pageReferences.push(`${pageObjectNumber} 0 R`)
+
+      const textLines: string[] = ["BT", "/F1 11 Tf", "14 TL", "50 770 Td"]
+      pageLines.forEach((line, lineIndex) => {
+        if (lineIndex > 0) {
+          textLines.push("T*")
+        }
+        textLines.push(`(${escapePdfText(line)}) Tj`)
+      })
+      textLines.push("ET")
+
+      const streamContent = textLines.join("\n")
+      const streamLength = encoder.encode(streamContent).length
+
+      objects[pageObjectNumber] =
+        `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${
+          pageStartObject + pages.length * 2
+        } 0 R >> >> /Contents ${contentObjectNumber} 0 R >>`
+      objects[contentObjectNumber] = `<< /Length ${streamLength} >>\nstream\n${streamContent}\nendstream`
+    })
+
+    objects[2] = `<< /Type /Pages /Kids [${pageReferences.join(" ")}] /Count ${pages.length} >>`
+    objects[pageStartObject + pages.length * 2] =
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"
+
+    let pdf = "%PDF-1.4\n"
+    const offsets: number[] = [0]
+
+    for (let objectNumber = 1; objectNumber < objects.length; objectNumber += 1) {
+      offsets[objectNumber] = encoder.encode(pdf).length
+      pdf += `${objectNumber} 0 obj\n${objects[objectNumber]}\nendobj\n`
+    }
+
+    const xrefOffset = encoder.encode(pdf).length
+    pdf += `xref\n0 ${objects.length}\n`
+    pdf += "0000000000 65535 f \n"
+    for (let objectNumber = 1; objectNumber < objects.length; objectNumber += 1) {
+      pdf += `${String(offsets[objectNumber]).padStart(10, "0")} 00000 n \n`
+    }
+    pdf += `trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`
+
+    return new Blob([pdf], { type: "application/pdf" })
+  }
+
+  const downloadSemesterPdf = (semester: PlannedSemester) => {
+    const lines: string[] = [
+      `Gator Path Semester Schedule`,
+      `${semester.label}`,
+      `Generated ${new Date().toLocaleString()}`,
+      "",
+    ]
+
+    if (semester.courses.length === 0) {
+      lines.push("No courses planned for this semester.")
+    } else {
+      semester.courses.forEach((course: PlannedSemesterCourse, index) => {
+        const meetingLabel =
+          course.meetings.length > 0
+            ? course.meetings
+                .map((meeting) =>
+                  meeting.days.length > 0 && meeting.startTime && meeting.endTime
+                    ? `${meeting.days.join("/")} ${meeting.startTime}-${meeting.endTime}`
+                    : "Arranged / TBA"
+                )
+                .join(" | ")
+            : "Arranged / TBA"
+
+        const sectionLabel = course.sectionNumber
+          ? `Section ${course.sectionNumber}`
+          : "Section not assigned"
+
+        lines.push(...wrapPdfLine(`${index + 1}. ${course.displayCode || course.code} - ${course.name}`))
+        lines.push(...wrapPdfLine(`   ${sectionLabel} | ${course.credits || 0} credits`))
+        lines.push(...wrapPdfLine(`   Meetings: ${meetingLabel}`))
+        if (course.note) {
+          lines.push(...wrapPdfLine(`   Note: ${course.note}`))
+        }
+        lines.push("")
+      })
+    }
+
+    const pageSize = 48
+    const pages: string[][] = []
+    for (let index = 0; index < lines.length; index += pageSize) {
+      pages.push(lines.slice(index, index + pageSize))
+    }
+
+    const blob = buildPdfBlob(pages.length > 0 ? pages : [["No data"]])
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement("a")
+    anchor.href = url
+    anchor.download = `${semester.label.toLowerCase().replace(/\s+/g, "-")}-schedule.pdf`
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+    URL.revokeObjectURL(url)
   }
 
   if (!uploadedAudit) {
@@ -183,27 +370,19 @@ export function PlannerContent() {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
             <Card>
               <CardContent className="pt-6">
                 <p className="text-sm text-muted-foreground">Planned semesters</p>
                 <p className="text-3xl font-bold text-primary">{plannerSemesters.length}</p>
               </CardContent>
             </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground">Courses in plan</p>
-              <p className="text-3xl font-bold text-primary">{totalPlannedCourses}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground">Audit state</p>
-              <p className="text-3xl font-bold text-primary">
-                Loaded
-              </p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="text-sm text-muted-foreground">Courses in plan</p>
+                <p className="text-3xl font-bold text-primary">{totalPlannedCourses}</p>
+              </CardContent>
+            </Card>
         </div>
 
         <Card className="border-dashed">
@@ -276,10 +455,16 @@ export function PlannerContent() {
                       API term code {semester.termCode} ({getTermLabel(semester.termCode)})
                     </CardDescription>
                   </div>
-                  <Button onClick={() => loadRecommendations(semester.id)}>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Generate Recommended Semester
-                  </Button>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" onClick={() => downloadSemesterPdf(semester)}>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download PDF
+                    </Button>
+                    <Button onClick={() => loadRecommendations(semester.id)}>
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Generate Recommended Semester
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -300,6 +485,15 @@ export function PlannerContent() {
                         <p className="font-medium text-primary">{course.displayCode || course.code}</p>
                         <p className="text-sm text-muted-foreground truncate">{course.name}</p>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-muted-foreground hover:text-destructive"
+                        onClick={() => removeCourseFromSemester(semester.id, course.code)}
+                      >
+                        <Trash2 className="mr-1 h-4 w-4" />
+                        Remove
+                      </Button>
                     </div>
                   ))
                 )}
@@ -309,7 +503,15 @@ export function PlannerContent() {
         </div>
       </div>
 
-      <Dialog open={Boolean(activeSemesterId)} onOpenChange={(open) => !open && setActiveSemesterId(null)}>
+      <Dialog
+        open={Boolean(activeSemesterId)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setActiveSemesterId(null)
+            setActiveCandidatePool([])
+          }
+        }}
+      >
         <DialogContent className="w-full sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -338,7 +540,10 @@ export function PlannerContent() {
 
           <Card className="border-dashed">
             <CardContent className="pt-6 text-sm text-muted-foreground">
-              Candidate pool: {candidatePool.map((course) => course.displayCode).join(", ")}
+              Candidate pool:{" "}
+              {activeCandidatePool.length > 0
+                ? activeCandidatePool.map((course) => course.displayCode).join(", ")
+                : "No candidate courses available for this semester."}
             </CardContent>
           </Card>
 
@@ -412,13 +617,6 @@ export function PlannerContent() {
               </Card>
             ))}
           </div>
-
-          {activeSemester?.termCode === TERM_OPTIONS[2].code && (
-            <p className="text-xs text-muted-foreground">
-              Spring 2027 is still selectable, but the public UF endpoint currently returns no rows
-              for term code 2271 in this repo's queries.
-            </p>
-          )}
         </DialogContent>
       </Dialog>
     </>
