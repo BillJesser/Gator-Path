@@ -48,7 +48,7 @@ export function DegreeAuditUpload({
 
   if (variant === "entry") {
     return (
-      <div className="w-full max-w-xl">
+      <div className="w-full max-w-2xl">
         <input
           ref={inputRef}
           type="file"
@@ -57,26 +57,51 @@ export function DegreeAuditUpload({
           onChange={onFileChange}
         />
 
-        <div className="rounded-3xl border border-border bg-card/80 p-8 text-center shadow-sm">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-            <FileJson className="h-7 w-7 text-primary" />
-          </div>
-          <h1 className="text-4xl font-semibold tracking-tight text-foreground">Gator Path</h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Upload your degree audit JSON to enter the app.
-          </p>
-          <div className="mt-8">
-            <Button size="lg" className="min-w-56" onClick={openPicker}>
-              <Upload className="mr-2 h-4 w-4" />
-              Upload Degree Audit
-            </Button>
-          </div>
-          {error && (
-            <div className="mt-6 flex items-start gap-2 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-left text-sm text-destructive">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>{error}</span>
+        <div className="relative overflow-hidden rounded-3xl border border-[rgb(40,87,151)]/20 bg-[rgb(255,255,255)] shadow-lg">
+          <div className="absolute inset-x-0 top-0 h-2 bg-[rgb(224,129,46)]" />
+          <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[rgb(40,87,151)]/10 blur-2xl" />
+          <div className="absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-[rgb(224,129,46)]/10 blur-2xl" />
+
+          <div className="relative space-y-6 p-8 text-center sm:p-10">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[rgb(40,87,151)]/15 bg-[rgb(40,87,151)]/10">
+              <FileJson className="h-8 w-8 text-[rgb(40,87,151)]" />
             </div>
-          )}
+
+            <div className="space-y-2">
+              <h1 className="text-4xl font-semibold tracking-tight text-[rgb(40,87,151)]">Gator Path</h1>
+              <p className="text-sm text-slate-600">Upload your degree audit JSON to enter the app.</p>
+            </div>
+
+            <div className="rounded-2xl border border-[rgb(40,87,151)]/15 bg-white/90 p-5 text-left">
+              <p className="text-sm font-semibold text-[rgb(40,87,151)]">
+                How to export your file from ONE.UF
+              </p>
+              <ol className="mt-3 space-y-2 text-sm text-slate-700">
+                <li>1. Sign in at one.uf.edu and open your Degree Audit page.</li>
+                <li>2. Choose the export/download option for audit data.</li>
+                <li>3. Select JSON format and save the file to your device.</li>
+                <li>4. Return here and upload that JSON file.</li>
+              </ol>
+            </div>
+
+            <div>
+              <Button
+                size="lg"
+                className="min-w-56 bg-[rgb(40,87,151)] text-white hover:bg-[rgb(30,69,120)]"
+                onClick={openPicker}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                Upload Degree Audit
+              </Button>
+            </div>
+
+            {error && (
+              <div className="flex items-start gap-2 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-left text-sm text-destructive">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )
@@ -91,7 +116,8 @@ export function DegreeAuditUpload({
         </CardTitle>
         <CardDescription>
           Upload a student degree-audit JSON file. The parsed result is reused across the
-          dashboard, degree-audit, planner, coursework, and profile pages.
+          dashboard, degree-audit, planner, coursework, and profile pages. In ONE.UF, open Degree
+          Audit, export/download the audit as JSON, then upload it here.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

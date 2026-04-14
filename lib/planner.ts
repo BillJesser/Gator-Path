@@ -33,11 +33,5 @@ export function createInitialPlannerSemesters(): PlannedSemester[] {
       termCode: "2268",
       courses: [],
     },
-    {
-      id: "spring-2027",
-      label: "Spring 2027",
-      termCode: "2271",
-      courses: [],
-    },
   ]
 }

@@ -6,7 +6,6 @@ export const UF_PUBLIC_SCHEDULE_ENDPOINT = "/apix/soc/schedule"
 export const TERM_OPTIONS = [
   { code: "2265", label: "Summer 2026" },
   { code: "2268", label: "Fall 2026" },
-  { code: "2271", label: "Spring 2027" },
 ] as const
 
 export type TermCode = (typeof TERM_OPTIONS)[number]["code"]

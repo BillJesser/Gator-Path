@@ -41,7 +41,7 @@ function getDifficultyColor(difficulty: CourseDifficulty) {
 }
 
 export function CourseworkContent() {
-  const { uploadedAudit } = usePlanningData()
+  const { uploadedAudit, plannerSemesters, setPlannerSemesters } = usePlanningData()
   const [requiredSearch, setRequiredSearch] = useState("")
   const [selectedRequiredGroup, setSelectedRequiredGroup] = useState("All")
   const [electiveSearch, setElectiveSearch] = useState("")
@@ -60,6 +60,10 @@ export function CourseworkContent() {
     () => new Set(uploadedAudit?.remainingRequirementCourseCodes || []),
     [uploadedAudit]
   )
+  const plannedCourseCodes = useMemo(
+    () => new Set(plannerSemesters.flatMap((semester) => semester.courses.map((course) => course.code))),
+    [plannerSemesters]
+  )
 
   const getAuditStatus = (code: string) => {
     if (completedCodes.has(code)) {
@@ -76,6 +80,52 @@ export function CourseworkContent() {
 
   if (!uploadedAudit) {
     return null
+  }
+
+  const addCourseToPlan = (course: { code: string; displayCode: string; name: string }) => {
+    setPlannerSemesters((current) => {
+      if (current.length === 0) {
+        return current
+      }
+
+      if (current.some((semester) => semester.courses.some((planned) => planned.code === course.code))) {
+        return current
+      }
+
+      const firstEmptySemesterIndex = current.findIndex((semester) => semester.courses.length === 0)
+      const targetSemesterIndex =
+        firstEmptySemesterIndex >= 0
+          ? firstEmptySemesterIndex
+          : current.reduce(
+              (lowestIndex, semester, index) =>
+                semester.courses.length < current[lowestIndex].courses.length ? index : lowestIndex,
+              0
+            )
+
+      return current.map((semester, index) => {
+        if (index !== targetSemesterIndex) {
+          return semester
+        }
+
+        return {
+          ...semester,
+          courses: [
+            ...semester.courses,
+            {
+              code: course.code,
+              displayCode: course.displayCode,
+              name: course.name,
+              sectionNumber: null,
+              credits: 0,
+              color: null,
+              meetings: [],
+              sectionDisplay: null,
+              note: "Added from coursework catalog",
+            },
+          ],
+        }
+      })
+    })
   }
 
   const filteredRequired = requiredCoreCourses.filter((course) => {
@@ -190,7 +240,7 @@ export function CourseworkContent() {
 
           <div className="space-y-3">
             {filteredRequired.map((course) => (
-              <Card key={course.code} className="hover:shadow-md transition-all">
+              <Card key={course.code} className="transition-all hover:shadow-md">
                 <CardContent className="pt-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                     <div className="flex-1 min-w-0">
@@ -219,9 +269,15 @@ export function CourseworkContent() {
                         </div>
                       )}
                     </div>
-                    <Button size="sm" variant="outline">
+                    <Button
+                      size="sm"
+                      variant={plannedCourseCodes.has(course.code) ? "secondary" : "outline"}
+                      className={!plannedCourseCodes.has(course.code) ? "bg-transparent" : ""}
+                      onClick={() => addCourseToPlan(course)}
+                      disabled={plannedCourseCodes.has(course.code)}
+                    >
                       <BookOpen className="mr-2 h-4 w-4" />
-                      Add to Plan
+                      {plannedCourseCodes.has(course.code) ? "Added to Plan" : "Add to Plan"}
                     </Button>
                   </div>
                 </CardContent>

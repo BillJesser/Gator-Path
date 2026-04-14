@@ -47,6 +47,7 @@ export type NormalizedDegreeAudit = {
   sourceFormat: "one-uf" | "simple" | "generic"
   studentName: string | null
   programName: string | null
+  gpa: number | null
   completedCourseCodes: string[]
   inProgressCourseCodes: string[]
   remainingRequirementCourseCodes: string[]
@@ -69,6 +70,114 @@ function isPlainObject(value: unknown): value is PlainObject {
 
 function toUniqueSorted(values: Iterable<string>) {
   return Array.from(new Set(values)).sort()
+}
+
+function normalizeGpaValue(value: unknown) {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0 && value <= 5) {
+    return Number(value.toFixed(2))
+  }
+  if (typeof value === "string" && value.trim().length > 0 && !Number.isNaN(Number(value))) {
+    const numeric = Number(value)
+    if (Number.isFinite(numeric) && numeric > 0 && numeric <= 5) {
+      return Number(numeric.toFixed(2))
+    }
+  }
+  return null
+}
+
+function readDirectGpa(payload: PlainObject) {
+  const directKeys = ["gpa", "ufGpa", "overallGpa", "cumulativeGpa", "currentGpa"]
+  for (const key of directKeys) {
+    const value = normalizeGpaValue(payload[key])
+    if (value !== null) {
+      return value
+    }
+  }
+  return null
+}
+
+function extractOneUfGpa(firstCareer: PlainObject) {
+  type GpaCandidate = {
+    value: number
+    score: number
+  }
+
+  const candidates: GpaCandidate[] = []
+
+  const scoreCandidate = (node: PlainObject, titleTrail: string[]) => {
+    const title = typeof node.title === "string" ? node.title.toLowerCase() : ""
+    const description = typeof node.description === "string" ? node.description.toLowerCase() : ""
+    const trailText = titleTrail.join(" ").toLowerCase()
+    let score = 0
+
+    if (node.displayGpa === true) {
+      score += 6
+    }
+
+    if (title.includes("overall gpa")) {
+      score += 10
+    }
+    if (title.includes("uf coursework")) {
+      score += 8
+    }
+    if (title.includes("uf gpa")) {
+      score += 8
+    }
+    if (title.includes("required to graduate")) {
+      score += 7
+    }
+    if (trailText.includes("overall gpa")) {
+      score += 4
+    }
+    if (trailText.includes("uf overall gpa")) {
+      score += 5
+    }
+
+    if (title.includes("department gpa") || title.includes("critical tracking")) {
+      score -= 6
+    }
+    if (
+      title.includes("cum laude") ||
+      description.includes("cum laude") ||
+      description.includes("honors")
+    ) {
+      score -= 5
+    }
+
+    return score
+  }
+
+  const visit = (node: unknown, titleTrail: string[]) => {
+    if (Array.isArray(node)) {
+      node.forEach((entry) => visit(entry, titleTrail))
+      return
+    }
+    if (!isPlainObject(node)) {
+      return
+    }
+
+    const gpaActual = normalizeGpaValue(node.gpaActual)
+    const title = typeof node.title === "string" ? node.title : null
+    const nextTrail = title ? [...titleTrail, title] : titleTrail
+
+    if (gpaActual !== null) {
+      candidates.push({
+        value: gpaActual,
+        score: scoreCandidate(node, nextTrail),
+      })
+    }
+
+    Object.values(node).forEach((value) => visit(value, nextTrail))
+  }
+
+  visit(firstCareer, [])
+
+  if (candidates.length === 0) {
+    return null
+  }
+
+  candidates.sort((a, b) => b.score - a.score || b.value - a.value)
+  return candidates[0].value
 }
 
 function getStatusFromString(value: string): DegreeAuditCourseStatus {
@@ -334,6 +443,7 @@ function normalizeDirectFormat(payload: PlainObject): NormalizedDegreeAudit | nu
         : typeof payload.program === "string"
           ? payload.program
           : null,
+    gpa: readDirectGpa(payload),
     completedCourseCodes: toUniqueSorted(completed || []),
     inProgressCourseCodes: toUniqueSorted(inProgress || []),
     remainingRequirementCourseCodes: toUniqueSorted(remaining || []),
@@ -513,6 +623,7 @@ function normalizeOneUfExport(payload: PlainObject): NormalizedDegreeAudit | nul
   const remainingRecords = extracted.filter((course) => course.status === "remaining")
 
   const remaining = remainingRecords.map((course) => course.code)
+  const gpa = extractOneUfGpa(firstCareer)
 
   return {
     sourceFormat: "one-uf",
@@ -523,6 +634,7 @@ function normalizeOneUfExport(payload: PlainObject): NormalizedDegreeAudit | nul
         : typeof firstCareer.careerDescription === "string"
           ? firstCareer.careerDescription
           : null,
+    gpa,
     completedCourseCodes: toUniqueSorted([...completedFromCareer, ...completed]),
     inProgressCourseCodes: toUniqueSorted([...inProgressFromCareer, ...inProgress]),
     remainingRequirementCourseCodes: toUniqueSorted(remaining),
@@ -579,6 +691,7 @@ export function normalizeDegreeAudit(payload: unknown): NormalizedDegreeAudit {
         : typeof root.program === "string"
           ? root.program
           : null,
+    gpa: readDirectGpa(root),
     completedCourseCodes: toUniqueSorted(completed),
     inProgressCourseCodes: toUniqueSorted(inProgress),
     remainingRequirementCourseCodes: toUniqueSorted(remaining),
