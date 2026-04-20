@@ -48,6 +48,7 @@ export function CourseworkContent() {
   const [selectedElectiveSource, setSelectedElectiveSource] =
     useState<(typeof electiveSources)[number]>("All")
   const [selectedElectiveGroup, setSelectedElectiveGroup] = useState("All")
+  const [selectedPlanSemesterId, setSelectedPlanSemesterId] = useState("")
   const completedCodes = useMemo(
     () => new Set(uploadedAudit?.completedCourseCodes || []),
     [uploadedAudit]
@@ -64,6 +65,23 @@ export function CourseworkContent() {
     () => new Set(plannerSemesters.flatMap((semester) => semester.courses.map((course) => course.code))),
     [plannerSemesters]
   )
+  const plannedCourseSemesterLabels = useMemo(() => {
+    const labelsByCode = new Map<string, string>()
+
+    plannerSemesters.forEach((semester) => {
+      semester.courses.forEach((course) => {
+        if (!labelsByCode.has(course.code)) {
+          labelsByCode.set(course.code, semester.label)
+        }
+      })
+    })
+
+    return labelsByCode
+  }, [plannerSemesters])
+  const selectedPlanSemester =
+    plannerSemesters.find((semester) => semester.id === selectedPlanSemesterId) ||
+    plannerSemesters[0] ||
+    null
 
   const getAuditStatus = (code: string) => {
     if (completedCodes.has(code)) {
@@ -82,7 +100,14 @@ export function CourseworkContent() {
     return null
   }
 
-  const addCourseToPlan = (course: { code: string; displayCode: string; name: string }) => {
+  const addCourseToPlan = (
+    course: { code: string; displayCode: string; name: string },
+    semesterId: string
+  ) => {
+    if (!semesterId) {
+      return
+    }
+
     setPlannerSemesters((current) => {
       if (current.length === 0) {
         return current
@@ -92,18 +117,12 @@ export function CourseworkContent() {
         return current
       }
 
-      const firstEmptySemesterIndex = current.findIndex((semester) => semester.courses.length === 0)
-      const targetSemesterIndex =
-        firstEmptySemesterIndex >= 0
-          ? firstEmptySemesterIndex
-          : current.reduce(
-              (lowestIndex, semester, index) =>
-                semester.courses.length < current[lowestIndex].courses.length ? index : lowestIndex,
-              0
-            )
+      if (!current.some((semester) => semester.id === semesterId)) {
+        return current
+      }
 
-      return current.map((semester, index) => {
-        if (index !== targetSemesterIndex) {
+      return current.map((semester) => {
+        if (semester.id !== semesterId) {
           return semester
         }
 
@@ -178,6 +197,29 @@ export function CourseworkContent() {
         </p>
       </div>
 
+      {plannerSemesters.length > 0 && (
+        <div className="grid gap-2 sm:max-w-xs">
+          <label className="text-sm font-medium" htmlFor="coursework-plan-semester">
+            Add courses to semester
+          </label>
+          <Select
+            value={selectedPlanSemester?.id || ""}
+            onValueChange={setSelectedPlanSemesterId}
+          >
+            <SelectTrigger id="coursework-plan-semester">
+              <SelectValue placeholder="Choose a semester" />
+            </SelectTrigger>
+            <SelectContent>
+              {plannerSemesters.map((semester) => (
+                <SelectItem key={semester.id} value={semester.id}>
+                  {semester.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       <Card className="border-dashed">
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Local Catalog Source</CardTitle>
@@ -239,50 +281,57 @@ export function CourseworkContent() {
           </p>
 
           <div className="space-y-3">
-            {filteredRequired.map((course) => (
-              <Card key={course.code} className="transition-all hover:shadow-md">
-                <CardContent className="pt-6">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-                    <div className="flex-1 min-w-0">
-                      <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <h3 className="font-semibold text-primary">{course.displayCode}</h3>
-                        <Badge variant="secondary" className="text-xs">
-                          {course.group}
-                        </Badge>
-                        {getAuditStatus(course.code) && (
-                          <Badge className={cn("text-xs", getAuditStatus(course.code)?.className)}>
-                            {getAuditStatus(course.code)?.label}
+            {filteredRequired.map((course) => {
+              const plannedSemesterLabel = plannedCourseSemesterLabels.get(course.code)
+              const isPlanned = plannedCourseCodes.has(course.code)
+
+              return (
+                <Card key={course.code} className="transition-all hover:shadow-md">
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                      <div className="flex-1 min-w-0">
+                        <div className="mb-2 flex flex-wrap items-center gap-2">
+                          <h3 className="font-semibold text-primary">{course.displayCode}</h3>
+                          <Badge variant="secondary" className="text-xs">
+                            {course.group}
                           </Badge>
-                        )}
-                        <Badge
-                          variant="secondary"
-                          className={cn("text-xs", getDifficultyColor(course.difficulty))}
-                        >
-                          {course.difficulty}
-                        </Badge>
-                      </div>
-                      <p className="font-medium">{course.name}</p>
-                      {course.notes && (
-                        <div className="mt-3 flex items-start gap-2 text-sm text-muted-foreground">
-                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                          <span>{course.notes}</span>
+                          {getAuditStatus(course.code) && (
+                            <Badge className={cn("text-xs", getAuditStatus(course.code)?.className)}>
+                              {getAuditStatus(course.code)?.label}
+                            </Badge>
+                          )}
+                          <Badge
+                            variant="secondary"
+                            className={cn("text-xs", getDifficultyColor(course.difficulty))}
+                          >
+                            {course.difficulty}
+                          </Badge>
                         </div>
-                      )}
+                        <p className="font-medium">{course.name}</p>
+                        {course.notes && (
+                          <div className="mt-3 flex items-start gap-2 text-sm text-muted-foreground">
+                            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                            <span>{course.notes}</span>
+                          </div>
+                        )}
+                      </div>
+                      <Button
+                        size="sm"
+                        variant={isPlanned ? "secondary" : "outline"}
+                        className={!isPlanned ? "bg-transparent" : ""}
+                        onClick={() => addCourseToPlan(course, selectedPlanSemester?.id || "")}
+                        disabled={isPlanned || !selectedPlanSemester}
+                      >
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        {isPlanned
+                          ? `Added to ${plannedSemesterLabel || "Plan"}`
+                          : `Add to ${selectedPlanSemester?.label || "Plan"}`}
+                      </Button>
                     </div>
-                    <Button
-                      size="sm"
-                      variant={plannedCourseCodes.has(course.code) ? "secondary" : "outline"}
-                      className={!plannedCourseCodes.has(course.code) ? "bg-transparent" : ""}
-                      onClick={() => addCourseToPlan(course)}
-                      disabled={plannedCourseCodes.has(course.code)}
-                    >
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      {plannedCourseCodes.has(course.code) ? "Added to Plan" : "Add to Plan"}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </TabsContent>
 

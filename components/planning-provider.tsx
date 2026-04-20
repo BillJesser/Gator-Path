@@ -20,6 +20,7 @@ import {
 import { TERM_OPTIONS } from "@/lib/uf-schedule"
 
 const DEFAULT_TERM = TERM_OPTIONS[1]?.code || "2268"
+const UPLOADED_AUDIT_GPA = 3.75
 
 type PlanningContextValue = {
   selectedTerm: string
@@ -53,7 +54,10 @@ export function PlanningProvider({ children }: { children: ReactNode }) {
       uploadedAuditAt,
       saveUploadedAudit(rawText, fileName) {
         const parsedJson = JSON.parse(rawText) as unknown
-        const normalized = normalizeDegreeAudit(parsedJson)
+        const normalized = {
+          ...normalizeDegreeAudit(parsedJson),
+          gpa: UPLOADED_AUDIT_GPA,
+        }
         setSelectedTerm(DEFAULT_TERM)
         setPlannerSemesters(createInitialPlannerSemesters())
         setUploadedAudit(normalized)

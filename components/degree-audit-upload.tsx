@@ -74,13 +74,13 @@ export function DegreeAuditUpload({
 
             <div className="rounded-2xl border border-[rgb(40,87,151)]/15 bg-white/90 p-5 text-left">
               <p className="text-sm font-semibold text-[rgb(40,87,151)]">
-                How to export your file from ONE.UF
+                How to get your audit JSON from ONE.UF
               </p>
               <ol className="mt-3 space-y-2 text-sm text-slate-700">
                 <li>1. Sign in at one.uf.edu and open your Degree Audit page.</li>
-                <li>2. Choose the export/download option for audit data.</li>
-                <li>3. Select JSON format and save the file to your device.</li>
-                <li>4. Return here and upload that JSON file.</li>
+                <li>2. Open your browser developer tools and select the Network tab.</li>
+                <li>3. Refresh the Degree Audit page, then open the degree-audit API request.</li>
+                <li>4. Copy the API response JSON, save it as a .json file, and upload it here.</li>
               </ol>
             </div>
 
@@ -117,7 +117,8 @@ export function DegreeAuditUpload({
         <CardDescription>
           Upload a student degree-audit JSON file. The parsed result is reused across the
           dashboard, degree-audit, planner, coursework, and profile pages. In ONE.UF, open Degree
-          Audit, export/download the audit as JSON, then upload it here.
+          Audit, use your browser developer tools Network tab to find the degree-audit API request,
+          copy the response JSON, save it as a .json file, then upload it here.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
